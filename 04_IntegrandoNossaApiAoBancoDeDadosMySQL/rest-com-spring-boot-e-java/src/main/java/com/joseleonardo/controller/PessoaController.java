@@ -30,7 +30,7 @@ public class PessoaController {
 	}
 	
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Pessoa buscarPorId(@PathVariable(value = "id") String id) {
+	public Pessoa buscarPorId(@PathVariable(value = "id") Long id) {
 		return pessoaService.buscarPorId(id);
 	}
 	
@@ -45,7 +45,7 @@ public class PessoaController {
 	}
 	
 	@DeleteMapping(value = "/{id}")
-	public void deletar(@PathVariable(value = "id") String id) {
+	public void deletar(@PathVariable(value = "id") Long id) {
 		pessoaService.deletar(id);
 	}
 	
