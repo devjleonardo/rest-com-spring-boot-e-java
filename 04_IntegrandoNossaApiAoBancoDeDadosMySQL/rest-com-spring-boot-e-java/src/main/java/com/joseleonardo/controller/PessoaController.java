@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,6 @@ public class PessoaController {
 
 	@Autowired
 	private PessoaService pessoaService;
-	// private PessoaService pessoaService = new PessoaService();
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Pessoa> listar() {
@@ -45,8 +45,10 @@ public class PessoaController {
 	}
 	
 	@DeleteMapping(value = "/{id}")
-	public void deletar(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<?> deletar(@PathVariable(value = "id") Long id) {
 		pessoaService.deletar(id);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 }

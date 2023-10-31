@@ -28,7 +28,7 @@ public class PessoaService {
 		logger.info("Encontrar uma pessoa!");
 		
 		return pessoaRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Nenhum registro econtrado para este ID!"));
+				.orElseThrow(() -> new ResourceNotFoundException("Não encontramos nenhum registro para este ID!"));
 	}
 	
 	public Pessoa salvar(Pessoa pessoa) {
@@ -41,21 +41,21 @@ public class PessoaService {
 		logger.info("Atualizando uma pessoa!");
 		
 		Pessoa pessoaAtual = pessoaRepository.findById(pessoaAtualizada.getId())
-			.orElseThrow(() -> new ResourceNotFoundException("Nenhum registro econtrado para este ID!"));
+			.orElseThrow(() -> new ResourceNotFoundException("Não encontramos nenhum registro para este ID!"));
 		
 		pessoaAtual.setPrimeiroNome(pessoaAtualizada.getPrimeiroNome());
 		pessoaAtual.setUltimoNome(pessoaAtualizada.getUltimoNome());
 		pessoaAtual.setEndereco(pessoaAtualizada.getEndereco());
 		pessoaAtual.setGenero(pessoaAtualizada.getGenero());
 		
-		return pessoaAtualizada;
+		return pessoaRepository.save(pessoaAtual);
 	}
 	
 	public void deletar(Long id) {
 		logger.info("Deletando uma pessoa!");
 		
 		Pessoa pessoa = pessoaRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Nenhum registro econtrado para este ID!"));
+				.orElseThrow(() -> new ResourceNotFoundException("Não encontramos nenhum registro para este ID!"));
 	
 		pessoaRepository.delete(pessoa);
 	}
