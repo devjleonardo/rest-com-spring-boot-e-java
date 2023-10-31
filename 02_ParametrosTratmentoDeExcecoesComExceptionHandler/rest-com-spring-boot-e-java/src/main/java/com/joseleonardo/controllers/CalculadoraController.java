@@ -1,30 +1,33 @@
-package com.joseleonardo;
-
-import java.util.concurrent.atomic.AtomicLong;
+package com.joseleonardo.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.joseleonardo.conversores.ConversorDeNumero;
 import com.joseleonardo.exceptions.UnsupportedMathOperationException;
+import com.joseleonardo.math.OperacoesMatematicaSimples;
 
 @RestController
 @RequestMapping("/calculadora")
 public class CalculadoraController {
 
-	private static final AtomicLong CONTADOR = new AtomicLong();
+	private OperacoesMatematicaSimples operacoesMatematica = new OperacoesMatematicaSimples(); 
 	
 	@GetMapping("/soma/{numeroUm}/{numeroDois}")
 	public Double soma(
 			@PathVariable(name = "numeroUm") String numeroUm,
 			@PathVariable(name = "numeroDois") String numeroDois) throws Exception {
 		
-		if (!isNumero(numeroUm) || !isNumero(numeroDois)) {
+		if (!ConversorDeNumero.isNumero(numeroUm) || !ConversorDeNumero.isNumero(numeroDois)) {
 			throw new UnsupportedMathOperationException("Por favor digite um valor númerico");
 		}
 		
-		return converterParaDouble(numeroUm) + converterParaDouble(numeroDois);
+		Double numeroUmConvertido = ConversorDeNumero.converterParaDouble(numeroUm);
+		Double numeroDoisConvertido = ConversorDeNumero.converterParaDouble(numeroDois);
+		
+		return operacoesMatematica.soma(numeroUmConvertido, numeroDoisConvertido);
 	}
 	
 	@GetMapping("/subtracao/{numeroUm}/{numeroDois}")
@@ -32,11 +35,14 @@ public class CalculadoraController {
 			@PathVariable(name = "numeroUm") String numeroUm,
 			@PathVariable(name = "numeroDois") String numeroDois) throws Exception {
 		
-		if (!isNumero(numeroUm) || !isNumero(numeroDois)) {
+		if (!ConversorDeNumero.isNumero(numeroUm) || !ConversorDeNumero.isNumero(numeroDois)) {
 			throw new UnsupportedMathOperationException("Por favor digite um valor númerico");
 		}
 		
-		return converterParaDouble(numeroUm) - converterParaDouble(numeroDois);
+		Double numeroUmConvertido = ConversorDeNumero.converterParaDouble(numeroUm);
+		Double numeroDoisConvertido = ConversorDeNumero.converterParaDouble(numeroDois);
+		
+		return operacoesMatematica.subtracao(numeroUmConvertido, numeroDoisConvertido);
 	}
 	
 	@GetMapping("/multiplicacao/{numeroUm}/{numeroDois}")
@@ -44,11 +50,14 @@ public class CalculadoraController {
 			@PathVariable(name = "numeroUm") String numeroUm,
 			@PathVariable(name = "numeroDois") String numeroDois) throws Exception {
 		
-		if (!isNumero(numeroUm) || !isNumero(numeroDois)) {
+		if (!ConversorDeNumero.isNumero(numeroUm) || !ConversorDeNumero.isNumero(numeroDois)) {
 			throw new UnsupportedMathOperationException("Por favor digite um valor númerico");
 		}
 		
-		return converterParaDouble(numeroUm) * converterParaDouble(numeroDois);
+		Double numeroUmConvertido = ConversorDeNumero.converterParaDouble(numeroUm);
+		Double numeroDoisConvertido = ConversorDeNumero.converterParaDouble(numeroDois);
+		
+		return operacoesMatematica.multiplicacao(numeroUmConvertido, numeroDoisConvertido);
 	}
 	
 	@GetMapping("/divisao/{numeroUm}/{numeroDois}")
@@ -56,11 +65,14 @@ public class CalculadoraController {
 			@PathVariable(name = "numeroUm") String numeroUm,
 			@PathVariable(name = "numeroDois") String numeroDois) throws Exception {
 		
-		if (!isNumero(numeroUm) || !isNumero(numeroDois)) {
+		if (!ConversorDeNumero.isNumero(numeroUm) || !ConversorDeNumero.isNumero(numeroDois)) {
 			throw new UnsupportedMathOperationException("Por favor digite um valor númerico");
 		}
 		
-		return converterParaDouble(numeroUm) / converterParaDouble(numeroDois);
+		Double numeroUmConvertido = ConversorDeNumero.converterParaDouble(numeroUm);
+		Double numeroDoisConvertido = ConversorDeNumero.converterParaDouble(numeroDois);
+		
+		return operacoesMatematica.divisao(numeroUmConvertido, numeroDoisConvertido);
 	}
 	
 	@GetMapping("/media/{numeroUm}/{numeroDois}")
@@ -68,46 +80,27 @@ public class CalculadoraController {
 			@PathVariable(name = "numeroUm") String numeroUm,
 			@PathVariable(name = "numeroDois") String numeroDois) throws Exception {
 		
-		if (!isNumero(numeroUm) || !isNumero(numeroDois)) {
+		if (!ConversorDeNumero.isNumero(numeroUm) || !ConversorDeNumero.isNumero(numeroDois)) {
 			throw new UnsupportedMathOperationException("Por favor digite um valor númerico");
 		}
 		
-		return (converterParaDouble(numeroUm) + converterParaDouble(numeroDois)) / 2;
+		Double numeroUmConvertido = ConversorDeNumero.converterParaDouble(numeroUm);
+		Double numeroDoisConvertido = ConversorDeNumero.converterParaDouble(numeroDois);
+		
+		return operacoesMatematica.media(numeroUmConvertido, numeroDoisConvertido);
 	}
 	
 	@GetMapping("/raiz-quadrada/{numero}")
 	public Double raizQuadrada(
 			@PathVariable(name = "numero") String numero) throws Exception {
 		
-		if (!isNumero(numero)) {
+		if (!ConversorDeNumero.isNumero(numero)) {
 			throw new UnsupportedMathOperationException("Por favor digite um valor númerico");
 		}
 		
-		return Math.sqrt(converterParaDouble(numero));
-	}
-
-	private Double converterParaDouble(String stringDoNumero) {
-		if (stringDoNumero == null) {
-			return 0D;
-		}
+		Double numeroConvertido = ConversorDeNumero.converterParaDouble(numero);
 		
-		String numero = stringDoNumero.replaceAll(",", ".");
-		
-		if (isNumero(numero)) {
-			return Double.parseDouble(numero);
-		}
-		
-		return 0D;
-	}
-
-	private boolean isNumero(String stringDoNumero) {
-		if (stringDoNumero == null) {
-			return false;
-		}
-		
-		String numero = stringDoNumero.replaceAll(",", ".");
-		
-		return numero.matches("[-+]?[0-9]*\\.?[0-9]+");
+		return operacoesMatematica.raizQuadrada(numeroConvertido);
 	}
 	
 }
