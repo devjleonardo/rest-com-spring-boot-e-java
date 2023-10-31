@@ -1,4 +1,4 @@
-package com.joseleonardo.controllers;
+package com.joseleonardo.controller;
 
 import java.util.List;
 
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.joseleonardo.model.Pessoa;
-import com.joseleonardo.services.PessoaService;
+import com.joseleonardo.domain.entity.Pessoa;
+import com.joseleonardo.domain.service.PessoaService;
 
 @RestController
 @RequestMapping("/pessoas")

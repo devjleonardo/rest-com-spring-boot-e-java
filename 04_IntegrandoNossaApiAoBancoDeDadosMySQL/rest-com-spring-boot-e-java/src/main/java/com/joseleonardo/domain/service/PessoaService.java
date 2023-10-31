@@ -1,4 +1,4 @@
-package com.joseleonardo.services;
+package com.joseleonardo.domain.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import org.springframework.stereotype.Service;
 
-import com.joseleonardo.model.Pessoa;
+import com.joseleonardo.domain.entity.Pessoa;
 
 @Service
 public class PessoaService {
