@@ -15,7 +15,7 @@ public class PessoaService {
 	private final AtomicLong contador = new AtomicLong();
 	private Logger logger = Logger.getLogger(PessoaService.class.getName());
 	
-	public List<Pessoa> listar() {
+	public List<Pessoa> listarTodas() {
 		logger.info("Encontrar todas pessoas!");
 		
 		List<Pessoa> pessoas = new ArrayList<>();
@@ -28,7 +28,7 @@ public class PessoaService {
 		return pessoas;
 	}
 	
-	public Pessoa buscar(String id) {
+	public Pessoa buscarPorId(String id) {
 		logger.info("Encontrar uma pessoa!");
 		
 		Pessoa pessoa = new Pessoa();
@@ -39,6 +39,22 @@ public class PessoaService {
 		pessoa.setGenero("Masculino");
 		
 		return pessoa;
+	}
+	
+	public Pessoa salvar(Pessoa pessoa) {
+		logger.info("Criando uma pessoa!");
+		
+		return pessoa;
+	}
+	
+	public Pessoa atualizar(Pessoa pessoa) {
+		logger.info("Atualizando uma pessoa!");
+		
+		return pessoa;
+	}
+	
+	public void deletar(String id) {
+		logger.info("Deletando uma pessoa!");
 	}
 	
 	private Pessoa mockPessoa(int i) {
