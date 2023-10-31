@@ -1,5 +1,7 @@
 package com.joseleonardo.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +20,14 @@ public class PessoaController {
 	private PessoaService pessoaService;
 	// private PessoaService pessoaService = new PessoaService();
 	
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Pessoa> listar() {
+		return pessoaService.listar();
+	}
+	
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Pessoa buscarPorId(@PathVariable(value = "id") String id) throws Exception {
-		return pessoaService.buscarPorId(id);
+	public Pessoa buscar(@PathVariable(value = "id") String id) throws Exception {
+		return pessoaService.buscar(id);
 	}
 	
 }
