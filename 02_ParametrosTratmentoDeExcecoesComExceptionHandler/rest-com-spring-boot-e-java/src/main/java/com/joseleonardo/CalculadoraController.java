@@ -19,11 +19,71 @@ public class CalculadoraController {
 	public Double soma(
 			@PathVariable(name = "numeroUm") String numeroUm,
 			@PathVariable(name = "numeroDois") String numeroDois) throws Exception {
+		
 		if (!isNumero(numeroUm) || !isNumero(numeroDois)) {
 			throw new UnsupportedMathOperationException("Por favor digite um valor númerico");
 		}
 		
 		return converterParaDouble(numeroUm) + converterParaDouble(numeroDois);
+	}
+	
+	@GetMapping("/subtracao/{numeroUm}/{numeroDois}")
+	public Double subtracao(
+			@PathVariable(name = "numeroUm") String numeroUm,
+			@PathVariable(name = "numeroDois") String numeroDois) throws Exception {
+		
+		if (!isNumero(numeroUm) || !isNumero(numeroDois)) {
+			throw new UnsupportedMathOperationException("Por favor digite um valor númerico");
+		}
+		
+		return converterParaDouble(numeroUm) - converterParaDouble(numeroDois);
+	}
+	
+	@GetMapping("/multiplicacao/{numeroUm}/{numeroDois}")
+	public Double multiplicacao(
+			@PathVariable(name = "numeroUm") String numeroUm,
+			@PathVariable(name = "numeroDois") String numeroDois) throws Exception {
+		
+		if (!isNumero(numeroUm) || !isNumero(numeroDois)) {
+			throw new UnsupportedMathOperationException("Por favor digite um valor númerico");
+		}
+		
+		return converterParaDouble(numeroUm) * converterParaDouble(numeroDois);
+	}
+	
+	@GetMapping("/divisao/{numeroUm}/{numeroDois}")
+	public Double divisao(
+			@PathVariable(name = "numeroUm") String numeroUm,
+			@PathVariable(name = "numeroDois") String numeroDois) throws Exception {
+		
+		if (!isNumero(numeroUm) || !isNumero(numeroDois)) {
+			throw new UnsupportedMathOperationException("Por favor digite um valor númerico");
+		}
+		
+		return converterParaDouble(numeroUm) / converterParaDouble(numeroDois);
+	}
+	
+	@GetMapping("/media/{numeroUm}/{numeroDois}")
+	public Double media(
+			@PathVariable(name = "numeroUm") String numeroUm,
+			@PathVariable(name = "numeroDois") String numeroDois) throws Exception {
+		
+		if (!isNumero(numeroUm) || !isNumero(numeroDois)) {
+			throw new UnsupportedMathOperationException("Por favor digite um valor númerico");
+		}
+		
+		return (converterParaDouble(numeroUm) + converterParaDouble(numeroDois)) / 2;
+	}
+	
+	@GetMapping("/raiz-quadrada/{numero}")
+	public Double raizQuadrada(
+			@PathVariable(name = "numero") String numero) throws Exception {
+		
+		if (!isNumero(numero)) {
+			throw new UnsupportedMathOperationException("Por favor digite um valor númerico");
+		}
+		
+		return Math.sqrt(converterParaDouble(numero));
 	}
 
 	private Double converterParaDouble(String stringDoNumero) {
