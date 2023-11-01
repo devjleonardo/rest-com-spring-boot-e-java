@@ -53,7 +53,7 @@ public class PessoaService {
 		
 		Pessoa entity = pessoaMapper.converterDTOV2ParaEntity(pessoaDTOV2);
 		
-		PessoaDTOV2 dtov2 = pessoaMapper.converterEntityParaDTOV2(entity);
+		PessoaDTOV2 dtov2 = pessoaMapper.converterEntityParaDTOV2(pessoaRepository.save(entity));
 		
 		return dtov2;
 	}
