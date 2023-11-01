@@ -1,4 +1,4 @@
-package com.joseleonardo.controller;
+package com.joseleonardo.controllers;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.joseleonardo.data.dto.v1.PessoaDTO;
-import com.joseleonardo.domain.service.PessoaService;
+import com.joseleonardo.services.PessoaService;
 
 @RestController
 @RequestMapping("/pessoas")

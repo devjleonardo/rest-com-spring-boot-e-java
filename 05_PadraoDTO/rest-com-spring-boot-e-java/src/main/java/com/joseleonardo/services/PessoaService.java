@@ -1,4 +1,4 @@
-package com.joseleonardo.domain.service;
+package com.joseleonardo.services;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -6,9 +6,11 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.joseleonardo.domain.entity.PessoaDTO;
-import com.joseleonardo.domain.repository.PessoaRepository;
-import com.joseleonardo.exception.ResourceNotFoundException;
+import com.joseleonardo.data.dto.v1.PessoaDTO;
+import com.joseleonardo.exceptions.ResourceNotFoundException;
+import com.joseleonardo.mapper.DozerMapper;
+import com.joseleonardo.model.Pessoa;
+import com.joseleonardo.repositories.PessoaRepository;
 
 @Service
 public class PessoaService {
@@ -21,26 +23,30 @@ public class PessoaService {
 	public List<PessoaDTO> listarTodas() {
 		logger.info("Encontrar todas pessoas!");
 		
-		return pessoaRepository.findAll();
+		return DozerMapper.parseListObjects(pessoaRepository.findAll(), PessoaDTO.class);
 	}
 	
 	public PessoaDTO buscarPorId(Long id) {
 		logger.info("Encontrar uma pessoa!");
 		
-		return pessoaRepository.findById(id)
+		Pessoa pessoa = pessoaRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Não encontramos nenhum registro para este ID!"));
+	
+		return DozerMapper.parseObject(pessoa, PessoaDTO.class);
 	}
 	
-	public PessoaDTO salvar(PessoaDTO pessoa) {
+	public PessoaDTO salvar(PessoaDTO pessoaDTO) {
 		logger.info("Criando uma pessoa!");
 		
-		return pessoaRepository.save(pessoa);
+		Pessoa pessoa = DozerMapper.parseObject(pessoaDTO, Pessoa.class);
+		
+		return DozerMapper.parseObject(pessoaRepository.save(pessoa), PessoaDTO.class);
 	}
 	
 	public PessoaDTO atualizar(PessoaDTO pessoaAtualizada) {
 		logger.info("Atualizando uma pessoa!");
 		
-		PessoaDTO pessoaAtual = pessoaRepository.findById(pessoaAtualizada.getId())
+		Pessoa pessoaAtual = pessoaRepository.findById(pessoaAtualizada.getId())
 			.orElseThrow(() -> new ResourceNotFoundException("Não encontramos nenhum registro para este ID!"));
 		
 		pessoaAtual.setPrimeiroNome(pessoaAtualizada.getPrimeiroNome());
@@ -48,13 +54,13 @@ public class PessoaService {
 		pessoaAtual.setEndereco(pessoaAtualizada.getEndereco());
 		pessoaAtual.setGenero(pessoaAtualizada.getGenero());
 		
-		return pessoaRepository.save(pessoaAtual);
+		return DozerMapper.parseObject(pessoaRepository.save(pessoaAtual), PessoaDTO.class);
 	}
 	
 	public void deletar(Long id) {
 		logger.info("Deletando uma pessoa!");
 		
-		PessoaDTO pessoa = pessoaRepository.findById(id)
+		Pessoa pessoa = pessoaRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Não encontramos nenhum registro para este ID!"));
 	
 		pessoaRepository.delete(pessoa);

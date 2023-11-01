@@ -1,4 +1,4 @@
-package com.joseleonardo.exception.handler;
+package com.joseleonardo.exceptions.handler;
 
 import java.util.Date;
 
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import com.joseleonardo.exception.ExceptionResponse;
-import com.joseleonardo.exception.ResourceNotFoundException;
+import com.joseleonardo.exceptions.ExceptionResponse;
+import com.joseleonardo.exceptions.ResourceNotFoundException;
 
 @ControllerAdvice
 public class CustomizedResponseEntityExceptionHandler {

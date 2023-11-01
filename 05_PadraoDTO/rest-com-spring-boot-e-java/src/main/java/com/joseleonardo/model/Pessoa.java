@@ -1,4 +1,4 @@
-package com.joseleonardo.domain.entity;
+package com.joseleonardo.model;
 
 import java.io.Serializable;
 import java.util.Objects;
