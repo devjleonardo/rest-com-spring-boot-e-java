@@ -10,6 +10,7 @@ import com.joseleonardo.data.dto.v1.PessoaDTO;
 import com.joseleonardo.data.dto.v2.PessoaDTOV2;
 import com.joseleonardo.exceptions.ResourceNotFoundException;
 import com.joseleonardo.mapper.DozerMapper;
+import com.joseleonardo.mapper.custom.PessoaMapper;
 import com.joseleonardo.model.Pessoa;
 import com.joseleonardo.repositories.PessoaRepository;
 
@@ -20,6 +21,9 @@ public class PessoaService {
 	
 	@Autowired
 	private PessoaRepository pessoaRepository;
+	
+	@Autowired
+	private PessoaMapper pessoaMapper;
 	
 	public List<PessoaDTO> listarTodas() {
 		logger.info("Encontrar todas pessoas!");
@@ -47,9 +51,11 @@ public class PessoaService {
 	public PessoaDTOV2 salvarV2(PessoaDTOV2 pessoaDTOV2) {
 		logger.info("Criando uma pessoa com V2!");
 		
-		Pessoa pessoa = DozerMapper.parseObject(pessoaDTOV2, Pessoa.class);
+		Pessoa entity = pessoaMapper.converterDTOV2ParaEntity(pessoaDTOV2);
 		
-		return DozerMapper.parseObject(pessoaRepository.save(pessoa), PessoaDTOV2.class);
+		PessoaDTOV2 dtov2 = pessoaMapper.converterEntityParaDTOV2(entity);
+		
+		return dtov2;
 	}
 	
 	public PessoaDTO atualizar(PessoaDTO pessoaAtualizada) {
