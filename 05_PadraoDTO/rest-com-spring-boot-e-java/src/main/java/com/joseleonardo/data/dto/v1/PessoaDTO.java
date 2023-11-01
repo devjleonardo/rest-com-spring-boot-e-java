@@ -12,20 +12,10 @@ public class PessoaDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(nullable = false, length = 80)
 	private String primeiroNome;
-	
-	@Column(nullable = false, length = 80)
 	private String ultimoNome;
-	
-	@Column(nullable = false, length = 100)
 	private String endereco;
-	
-	@Column(nullable = false, length = 9)
 	private String genero;
 
 	public PessoaDTO() {
