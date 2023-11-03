@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.joseleonardo.controllers.PessoaController;
 import com.joseleonardo.data.dto.v1.PessoaDTO;
+import com.joseleonardo.exceptions.RequiredObjectIsNullException;
 import com.joseleonardo.exceptions.ResourceNotFoundException;
 import com.joseleonardo.mapper.DozerMapper;
 import com.joseleonardo.model.Pessoa;
@@ -50,6 +51,10 @@ public class PessoaService {
 	}
 	
 	public PessoaDTO salvar(PessoaDTO pessoa) {
+		if (pessoa == null) {
+			throw new RequiredObjectIsNullException();
+		}
+		
 		logger.info("Criando uma pessoa!");
 		
 		Pessoa entity = DozerMapper.parseObject(pessoa, Pessoa.class);
@@ -62,6 +67,10 @@ public class PessoaService {
 	}
 	
 	public PessoaDTO atualizar(PessoaDTO pessoaAtualizada) {
+		if (pessoaAtualizada == null) {
+			throw new RequiredObjectIsNullException();
+		}
+		
 		logger.info("Atualizando uma pessoa!");
 		
 		Pessoa entity = pessoaRepository.findById(pessoaAtualizada.getId())

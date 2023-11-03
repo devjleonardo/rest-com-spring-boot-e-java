@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.joseleonardo.data.dto.v1.PessoaDTO;
+import com.joseleonardo.exceptions.RequiredObjectIsNullException;
 import com.joseleonardo.model.Pessoa;
 import com.joseleonardo.repositories.PessoaRepository;
 import com.joseleonardo.services.PessoaService;
@@ -88,6 +89,18 @@ class PessoaServiceTest {
 		assertEquals("Endereço teste1", resultado.getEndereco());
 		assertEquals("Feminino", resultado.getGenero());
 	}
+	
+	@Test
+	void testSalvarComPessoaNula() {
+		Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> {
+			pessoaService.salvar(null);
+		});
+		
+		String mensagemEsperada = "Não é permitido persistir um objeto nulo!";
+		String mensagemAtual = exception.getMessage();
+		
+		assertTrue(mensagemAtual.contains(mensagemEsperada));
+	}
 
 	@Test
 	void testAtualizar() {
@@ -112,6 +125,18 @@ class PessoaServiceTest {
 		assertEquals("Último nome teste1", resultado.getUltimoNome());
 		assertEquals("Endereço teste1", resultado.getEndereco());
 		assertEquals("Feminino", resultado.getGenero());
+	}
+	
+	@Test
+	void testAtualizarComPessoaNula() {
+		Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> {
+			pessoaService.atualizar(null);
+		});
+		
+		String mensagemEsperada = "Não é permitido persistir um objeto nulo!";
+		String mensagemAtual = exception.getMessage();
+		
+		assertTrue(mensagemAtual.contains(mensagemEsperada));
 	}
 
 	@Test
