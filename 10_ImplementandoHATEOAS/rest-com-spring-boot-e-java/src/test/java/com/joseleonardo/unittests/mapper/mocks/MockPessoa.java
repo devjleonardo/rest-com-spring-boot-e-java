@@ -6,7 +6,7 @@ import java.util.List;
 import com.joseleonardo.data.dto.v1.PessoaDTO;
 import com.joseleonardo.model.Pessoa;
 
-public class MockPerson {
+public class MockPessoa {
 
 
     public Pessoa mockEntity() {
@@ -42,8 +42,8 @@ public class MockPerson {
         pessoa.setId(numero.longValue());
         pessoa.setPrimeiroNome("Primeiro nome teste" + numero);
         pessoa.setUltimoNome("Último nome teste" + numero);
-        pessoa.setGenero(((numero % 2) == 0) ? "Masculino" : "Feminino");
         pessoa.setEndereco("Endereço teste" + numero);
+        pessoa.setGenero(((numero % 2) == 0) ? "Masculino" : "Feminino");
         
         return pessoa;
     }
@@ -53,8 +53,8 @@ public class MockPerson {
         pessoaDTO.setId(numero.longValue());
         pessoaDTO.setPrimeiroNome("Primeiro nome teste" + numero);
         pessoaDTO.setUltimoNome("Último nome teste" + numero);
-        pessoaDTO.setGenero(((numero % 2) == 0) ? "Masculino" : "Feminino");
         pessoaDTO.setEndereco("Endereço teste" + numero);
+        pessoaDTO.setGenero(((numero % 2) == 0) ? "Masculino" : "Feminino");
         
         return pessoaDTO;
     }

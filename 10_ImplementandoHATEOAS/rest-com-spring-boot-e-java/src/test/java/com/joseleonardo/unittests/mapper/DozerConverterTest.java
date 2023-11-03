@@ -10,15 +10,15 @@ import org.junit.jupiter.api.Test;
 import com.joseleonardo.data.dto.v1.PessoaDTO;
 import com.joseleonardo.mapper.DozerMapper;
 import com.joseleonardo.model.Pessoa;
-import com.joseleonardo.unittests.mapper.mocks.MockPerson;
+import com.joseleonardo.unittests.mapper.mocks.MockPessoa;
 
 public class DozerConverterTest {
     
-    MockPerson inputObject;
+    MockPessoa inputObject;
 
     @BeforeEach
     public void setUp() {
-        inputObject = new MockPerson();
+        inputObject = new MockPessoa();
     }
 
     @Test
