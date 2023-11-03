@@ -47,10 +47,9 @@ class PessoaServiceTest {
 
 	@Test
 	void testBuscarPorId() {
-		Pessoa pessoa = input.mockEntity(1);
-		pessoa.setId(1L);
+		Pessoa entity = input.mockEntity(1);
 		
-		when(pessoaRepository.findById(1L)).thenReturn(Optional.of(pessoa));
+		when(pessoaRepository.findById(1L)).thenReturn(Optional.of(entity));
 		
 		PessoaDTO resultado = pessoaService.buscarPorId(1L);
 		
@@ -58,7 +57,6 @@ class PessoaServiceTest {
 		assertNotNull(resultado.getId());
 		assertNotNull(resultado.getLinks());
 		
-		System.out.println(resultado.toString());
 		assertTrue(resultado.toString().contains("[</api/pessoas/v1/1>;rel=\"self\"]"));
 		
 		assertEquals("Primeiro nome teste1", resultado.getPrimeiroNome());
@@ -69,17 +67,60 @@ class PessoaServiceTest {
 
 	@Test
 	void testSalvar() {
-		fail("Not yet implemented");
+		Pessoa entity = input.mockEntity(1);
+		Pessoa persistido = entity;
+		
+		when(pessoaRepository.save(entity)).thenReturn(persistido);
+		
+		PessoaDTO dto = input.mockVO(1);
+		dto.setId(1L);
+		
+		PessoaDTO resultado = pessoaService.salvar(dto);
+		
+		assertNotNull(resultado);
+		assertNotNull(resultado.getId());
+		assertNotNull(resultado.getLinks());
+		
+		assertTrue(resultado.toString().contains("[</api/pessoas/v1/1>;rel=\"self\"]"));
+		
+		assertEquals("Primeiro nome teste1", resultado.getPrimeiroNome());
+		assertEquals("Último nome teste1", resultado.getUltimoNome());
+		assertEquals("Endereço teste1", resultado.getEndereco());
+		assertEquals("Feminino", resultado.getGenero());
 	}
 
 	@Test
 	void testAtualizar() {
-		fail("Not yet implemented");
+		Pessoa entity = input.mockEntity(1);
+		Pessoa persistido = entity;
+		
+		when(pessoaRepository.findById(1L)).thenReturn(Optional.of(entity));
+		when(pessoaRepository.save(entity)).thenReturn(persistido);
+		
+		PessoaDTO dto = input.mockVO(1);
+		dto.setId(1L);
+		
+		PessoaDTO resultado = pessoaService.atualizar(dto);
+		
+		assertNotNull(resultado);
+		assertNotNull(resultado.getId());
+		assertNotNull(resultado.getLinks());
+		
+		assertTrue(resultado.toString().contains("[</api/pessoas/v1/1>;rel=\"self\"]"));
+		
+		assertEquals("Primeiro nome teste1", resultado.getPrimeiroNome());
+		assertEquals("Último nome teste1", resultado.getUltimoNome());
+		assertEquals("Endereço teste1", resultado.getEndereco());
+		assertEquals("Feminino", resultado.getGenero());
 	}
 
 	@Test
 	void testDeletar() {
-		fail("Not yet implemented");
+		Pessoa entity = input.mockEntity(1);
+		
+		when(pessoaRepository.findById(1L)).thenReturn(Optional.of(entity));
+		
+		pessoaService.deletar(1L);
 	}
 
 }
