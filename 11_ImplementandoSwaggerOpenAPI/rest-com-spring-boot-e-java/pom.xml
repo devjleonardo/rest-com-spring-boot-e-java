@@ -22,6 +22,8 @@
 		<java.version>17</java.version>
 		<dozer.version>6.5.2</dozer.version>
 		<springdoc.version>2.0.2</springdoc.version>
+		<testcontainers.version>1.16.3</testcontainers.version>
+		<rest-assured.version>4.5.0</rest-assured.version>
 	</properties>
 
 	<dependencies>
@@ -100,13 +102,27 @@
 			<artifactId>spring-hateoas</artifactId>
 		</dependency>
 
-		<!-- Mockito -->
+		<!-- Mockito e Tests -->
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mysql</artifactId>
+			<version>${testcontainers.version}</version><!--$NO-MVN-MAN-VER$ -->
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${rest-assured.version}</version><!--$NO-MVN-MAN-VER$ -->
+			<scope>test</scope>
+		</dependency>
+
 		<!-- OpenAPI -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
