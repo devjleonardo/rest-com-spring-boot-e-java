@@ -1769,7 +1769,7 @@
 			"name": "Autenticação",
 			"item": [
 				{
-					"name": "Signin",
+					"name": "Autentica um usuário e retorna um token",
 					"event": [
 						{
 							"listen": "test",
@@ -1799,6 +1799,46 @@
 							}
 						},
 						"url": "{{baseUrl}}/autenticacao/signin"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar token para usuário autenticado e retornar um token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(responseCode.code >= 200 && responseCode.code <= 299) {\r",
+									"    var jsonData = JSON.parse(responseBody)\r",
+									"\r",
+									"    postman.setEnvironmentVariable(\"accessToken\", jsonData.accessToken);\r",
+									"    postman.setEnvironmentVariable(\"refreshToken\", jsonData.refreshToken);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomeDeUsuario\": \"{{nomeDeUsuario}}\",\r\n    \"senha\": \"{{senha}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/autenticacao/refresh/{{nomeDeUsuario}}"
 					},
 					"response": []
 				}

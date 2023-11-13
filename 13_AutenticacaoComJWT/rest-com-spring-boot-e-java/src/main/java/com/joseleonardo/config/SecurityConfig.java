@@ -29,7 +29,7 @@ public class SecurityConfig {
         	.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                     .requestMatchers(
                     		"/autenticacao/signin",
-                    		"/auth/refresh",
+                    		"/autenticacao/refresh/**",
                     		"/v3/api-docs/**",
                     		"/swagger-ui/**").permitAll()
                     .requestMatchers("/api/**").authenticated()

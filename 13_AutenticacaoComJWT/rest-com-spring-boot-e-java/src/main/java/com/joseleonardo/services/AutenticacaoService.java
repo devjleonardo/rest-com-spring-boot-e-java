@@ -50,4 +50,20 @@ public class AutenticacaoService {
 			throw new BadCredentialsException("Nome de usuário/senha inválido!");
 		}
 	}
+	
+	public ResponseEntity<?> refreshToken(String nomeDeUsuario, String refreshToken) {
+		Usuario usuario = usuarioRepository.buscarPorNomeDeUsuario(nomeDeUsuario);
+		
+		TokenDTO tokenResponse = new TokenDTO();
+		
+		if(usuario != null) {
+			tokenResponse = jwtTokenProvider.refreshToken(refreshToken);
+		} else {
+			throw new UsernameNotFoundException("Nome de usuário " + nomeDeUsuario + 
+					" não encontrado!");
+		}
+		
+		return ResponseEntity.ok(tokenResponse);
+	}
+	
 }
