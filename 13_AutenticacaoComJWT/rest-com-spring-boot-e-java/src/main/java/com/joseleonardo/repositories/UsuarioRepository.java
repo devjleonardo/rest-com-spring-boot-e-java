@@ -10,7 +10,7 @@ import com.joseleonardo.model.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-	@Query("SELECT u FROM Usuario WHERE u.nomeDeUsuario =:nomeDeUsuario")
+	@Query("SELECT u FROM Usuario u WHERE u.nomeDeUsuario =:nomeDeUsuario")
 	Usuario buscarPorNomeDeUsuario(@Param("nomeDeUsuario") String nomeDeUsuario);
 	
 }

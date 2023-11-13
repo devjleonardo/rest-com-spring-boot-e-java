@@ -28,10 +28,10 @@ public class SecurityConfig {
         	.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         	.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                     .requestMatchers(
-                    		"/auth/signin",
+                    		"/autenticacao/signin",
                     		"/auth/refresh",
-                    		"/api-docs/**",
-                    		"/swagger-ui.html**").permitAll()
+                    		"/v3/api-docs/**",
+                    		"/swagger-ui/**").permitAll()
                     .requestMatchers("/api/**").authenticated()
                     .requestMatchers("/users").denyAll()
         	)
