@@ -26,7 +26,7 @@ public class AutenticacaoService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
-	public ResponseEntity<?> entrar(CredenciaisDaContaDTO credenciaisDaContaDTO) {
+	public ResponseEntity<?> signin(CredenciaisDaContaDTO credenciaisDaContaDTO) {
 		try {
 			String nomeDeUsuario = credenciaisDaContaDTO.getNomeDeUsuario();
 			String senha = credenciaisDaContaDTO.getSenha();
