@@ -3,6 +3,9 @@ package com.joseleonardo.integrationtests.dto;
 import java.io.Serializable;
 import java.util.Objects;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class CredenciaisDaContaDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -10,6 +13,9 @@ public class CredenciaisDaContaDTO implements Serializable {
 	private String nomeDeUsuario;
 	private String senha;
 
+	public CredenciaisDaContaDTO() {
+	}
+	
 	public CredenciaisDaContaDTO(String nomeDeUsuario, String senha) {
 		this.nomeDeUsuario = nomeDeUsuario;
 		this.senha = senha;
