@@ -31,14 +31,14 @@ public class AutenticacaoControllerJsonTest extends AbstractIntegrationTest {
 				.basePath("/autenticacao/signin")
 					.port(TestConfigs.SERVER_PORT)
 					.contentType(TestConfigs.CONTENT_TYPE_JSON)
-				.body(usuario)
-					.when()
-				.post()
-					.then()
-						.statusCode(200)
-							.extract()
-							.body()
-					    		.as(TokenDTO.class);
+					.body(usuario)
+				.when()
+					.post()
+				.then()
+					.statusCode(200)
+				.extract()
+					.body()
+						.as(TokenDTO.class);
 		
 		assertNotNull(tokenDTO.getAccessToken());
 		assertNotNull(tokenDTO.getRefreshToken());
@@ -51,15 +51,15 @@ public class AutenticacaoControllerJsonTest extends AbstractIntegrationTest {
 				.basePath("/autenticacao/refresh")
 					.port(TestConfigs.SERVER_PORT)
 					.contentType(TestConfigs.CONTENT_TYPE_JSON)
-				.pathParam("nomeDeUsuario", tokenDTO.getNomeDeUsuario())
-				.header(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDTO.getRefreshToken())
-					.when()
-				.put("{nomeDeUsuario}")
-					.then()
-						.statusCode(200)
-							.extract()
-							.body()
-					    		.as(TokenDTO.class);
+					.pathParam("nomeDeUsuario", tokenDTO.getNomeDeUsuario())
+					.header(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDTO.getRefreshToken())
+				.when()
+					.put("{nomeDeUsuario}")
+				.then()
+					.statusCode(200)
+				.extract()
+					.body()
+						.as(TokenDTO.class);
 		
 		assertNotNull(newTokenDTO.getAccessToken());
 		assertNotNull(tokenDTO.getRefreshToken());
