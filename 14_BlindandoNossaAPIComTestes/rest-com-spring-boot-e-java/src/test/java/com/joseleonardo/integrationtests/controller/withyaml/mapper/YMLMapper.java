@@ -1,5 +1,7 @@
 package com.joseleonardo.integrationtests.controller.withyaml.mapper;
 
+import java.util.logging.Logger;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -11,6 +13,8 @@ import io.restassured.mapper.ObjectMapperDeserializationContext;
 import io.restassured.mapper.ObjectMapperSerializationContext;
 
 public class YMLMapper implements ObjectMapper {
+	
+	private Logger logger = Logger.getLogger(YMLMapper.class.getName());
 
 	private com.fasterxml.jackson.databind.ObjectMapper objectMapper;
 	protected TypeFactory typeFactory;
@@ -28,10 +32,15 @@ public class YMLMapper implements ObjectMapper {
 			String dataToDeserialize = context.getDataToDeserialize().asString();
 			Class type = (Class) context.getType();
 			
+			logger.info("Tentando desserializar objeto do tipo " + type);
+			
 			return objectMapper.readValue(dataToDeserialize, typeFactory.constructType(type));
 		} catch (JsonMappingException e) {
+			logger.severe("Erro ao desserializar objeto");
+			
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
+			logger.severe("Erro ao desserializar objeto");
 			e.printStackTrace();
 		}
 		

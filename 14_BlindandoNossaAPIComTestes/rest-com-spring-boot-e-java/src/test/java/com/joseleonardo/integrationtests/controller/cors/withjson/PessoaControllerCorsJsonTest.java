@@ -1,4 +1,4 @@
-package com.joseleonardo.integrationtests.controller.withjson;
+package com.joseleonardo.integrationtests.controller.cors.withjson;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -30,7 +30,7 @@ import io.restassured.specification.RequestSpecification;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(OrderAnnotation.class)
-public class PessoaControllerJsonTest extends AbstractIntegrationTest {
+public class PessoaControllerCorsJsonTest extends AbstractIntegrationTest {
 
 	private static RequestSpecification requestSpecification;
 	private static ObjectMapper objectMapper;
@@ -79,6 +79,7 @@ public class PessoaControllerJsonTest extends AbstractIntegrationTest {
 		
 		String content = given().spec(requestSpecification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_JOSE_LEONARDO)
 				.body(pessoa)
 				.when()
 					.post()
@@ -101,44 +102,32 @@ public class PessoaControllerJsonTest extends AbstractIntegrationTest {
 		
 		assertTrue(pessoaPersistida.getId() > 0);
 		
-		assertEquals("Lúcia", pessoaPersistida.getPrimeiroNome());
-		assertEquals("Márcia", pessoaPersistida.getUltimoNome());
-		assertEquals("Santa Catarina", pessoaPersistida.getEndereco());
-		assertEquals("Feminino", pessoaPersistida.getGenero());
+		assertEquals("Nicolas", pessoaPersistida.getPrimeiroNome());
+		assertEquals("Arthur", pessoaPersistida.getUltimoNome());
+		assertEquals("Rio Grande do Norte", pessoaPersistida.getEndereco());
+		assertEquals("Masculino", pessoaPersistida.getGenero());
 	}
 	
 	@Test
 	@Order(2)
-	public void testAtualizar() throws JsonMappingException, JsonProcessingException {
-		pessoa.setUltimoNome("Nogueira");
+	public void testSalvarComOriginErrado() throws JsonMappingException, JsonProcessingException {
+		mockPessoa();
 		
 		String content = given().spec(requestSpecification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_JLEONARDO)
 				.body(pessoa)
 				.when()
 					.post()
 				.then()
-					.statusCode(200)
+					.statusCode(403)
 				.extract()
 					.body()
 					    .asString();
 		
-		PessoaDTO pessoaPersistida = objectMapper.readValue(content, PessoaDTO.class);
-		pessoa = pessoaPersistida;
+		assertNotNull(content);
 		
-		assertNotNull(pessoaPersistida);
-		
-		assertNotNull(pessoaPersistida.getId());
-		assertNotNull(pessoaPersistida.getPrimeiroNome());
-		assertNotNull(pessoaPersistida.getUltimoNome());
-		assertNotNull(pessoaPersistida.getEndereco());
-		assertNotNull(pessoaPersistida.getGenero());
-		
-		assertEquals(pessoa.getId(), pessoaPersistida.getId());
-		assertEquals("Lúcia", pessoaPersistida.getPrimeiroNome());
-		assertEquals("Nogueira", pessoaPersistida.getUltimoNome());
-		assertEquals("Santa Catarina", pessoaPersistida.getEndereco());
-		assertEquals("Feminino", pessoaPersistida.getGenero());
+		assertEquals("Invalid CORS request", content);
 	}
 	
 	@Test
@@ -171,17 +160,39 @@ public class PessoaControllerJsonTest extends AbstractIntegrationTest {
 		
 		assertTrue(pessoaPersistida.getId() > 0);
 		
-		assertEquals("Lúcia", pessoaPersistida.getPrimeiroNome());
-		assertEquals("Nogueira", pessoaPersistida.getUltimoNome());
-		assertEquals("Santa Catarina", pessoaPersistida.getEndereco());
-		assertEquals("Feminino", pessoaPersistida.getGenero());
+		assertEquals("Nicolas", pessoaPersistida.getPrimeiroNome());
+		assertEquals("Arthur", pessoaPersistida.getUltimoNome());
+		assertEquals("Rio Grande do Norte", pessoaPersistida.getEndereco());
+		assertEquals("Masculino", pessoaPersistida.getGenero());
 	}
 	
+	@Test
+	@Order(4)
+	public void testBuscarPorIdComOriginErrado() throws JsonMappingException, JsonProcessingException {
+		mockPessoa();
+		
+		String content = given().spec(requestSpecification)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.header(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_JLEONARDO)
+				.pathParam("id", pessoa.getId())
+				.when()
+					.get("{id}")
+				.then()
+					.statusCode(403)
+				.extract()
+					.body()
+					    .asString();
+		
+		assertNotNull(content);
+		
+		assertEquals("Invalid CORS request", content);
+	}
+
 	private void mockPessoa() {
-		pessoa.setPrimeiroNome("Lúcia");
-		pessoa.setUltimoNome("Márcia");
-		pessoa.setEndereco("Santa Catarina");
-		pessoa.setGenero("Feminino");
+		pessoa.setPrimeiroNome("Nicolas");
+		pessoa.setUltimoNome("Arthur");
+		pessoa.setEndereco("Rio Grande do Norte");
+		pessoa.setGenero("Masculino");
 	}
 
 }
