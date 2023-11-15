@@ -1,9 +1,11 @@
 package com.joseleonardo.integrationtests.controller.withjson;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -175,6 +178,87 @@ public class PessoaControllerJsonTest extends AbstractIntegrationTest {
 		assertEquals("Nogueira", pessoaPersistida.getUltimoNome());
 		assertEquals("Santa Catarina", pessoaPersistida.getEndereco());
 		assertEquals("Feminino", pessoaPersistida.getGenero());
+	}
+	
+	@Test
+	@Order(4)
+	public void testDeletar() throws JsonMappingException, JsonProcessingException {
+		given().spec(requestSpecification)
+			.contentType(TestConfigs.CONTENT_TYPE_JSON)
+			.pathParam("id", pessoa.getId())
+			.when()
+				.delete("{id}")
+			.then()
+				.statusCode(204);
+	}
+	
+	@Test
+	@Order(5)
+	public void testListarTodas() throws JsonMappingException, JsonProcessingException {
+		String content = given().spec(requestSpecification)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.when()
+					.get()
+				.then()
+					.statusCode(200)
+				.extract()
+					.body()
+						.asString();
+					 // .as(new TypeRef<List<PessoaDTO>>() {});
+		
+		List<PessoaDTO> pessoas = objectMapper.readValue(content, 
+				new TypeReference<List<PessoaDTO>>() {});
+		
+		PessoaDTO pessoaUm = pessoas.get(0);
+		
+		assertNotNull(pessoaUm.getId());
+		assertNotNull(pessoaUm.getPrimeiroNome());
+		assertNotNull(pessoaUm.getUltimoNome());
+		assertNotNull(pessoaUm.getEndereco());
+		assertNotNull(pessoaUm.getGenero());
+		
+		assertEquals(1, pessoaUm.getId());
+		
+		assertEquals("Maria", pessoaUm.getPrimeiroNome());
+		assertEquals("Helena", pessoaUm.getUltimoNome());
+		assertEquals("São Paulo", pessoaUm.getEndereco());
+		assertEquals("Feminino", pessoaUm.getGenero());
+		
+		PessoaDTO pessoaSeis = pessoas.get(5);
+		
+		assertNotNull(pessoaSeis.getId());
+		assertNotNull(pessoaSeis.getPrimeiroNome());
+		assertNotNull(pessoaSeis.getUltimoNome());
+		assertNotNull(pessoaSeis.getEndereco());
+		assertNotNull(pessoaSeis.getGenero());
+		
+		assertEquals(6, pessoaSeis.getId());
+		
+		assertEquals("Theo", pessoaSeis.getPrimeiroNome());
+		assertEquals("Benício", pessoaSeis.getUltimoNome());
+		assertEquals("Santa Catarina", pessoaSeis.getEndereco());
+		assertEquals("Masculino", pessoaSeis.getGenero());
+	}
+	
+	@Test
+	@Order(6)
+	public void testListarTodasSemToken() throws JsonMappingException, JsonProcessingException {
+		RequestSpecification requestSpecificationSemToken = new RequestSpecBuilder()
+				.setBasePath("/api/pessoas/v1")
+				.setPort(TestConfigs.SERVER_PORT)
+					.addFilter(new RequestLoggingFilter(LogDetail.ALL))
+					.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+				.build();
+		
+		given().spec(requestSpecificationSemToken)
+				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.when()
+					.get()
+				.then()
+					.statusCode(403)
+				.extract()
+					.body()
+						.asString();
 	}
 	
 	private void mockPessoa() {
