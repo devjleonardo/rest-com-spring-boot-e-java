@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name = "TokenDTO")
 public class TokenDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -31,12 +31,12 @@ import io.restassured.specification.RequestSpecification;
 @TestMethodOrder(OrderAnnotation.class)
 public class AutenticacaoControllerYamlTest extends AbstractIntegrationTest {
 
-	private static YMLMapper objectMapper;
+	private static YMLMapper ymlMapper;
 	private static TokenDTO tokenDTO;
 	
 	@BeforeAll
 	public static void setup() {
-		objectMapper = new YMLMapper();
+		ymlMapper = new YMLMapper();
 	}
 	
 	@Test
@@ -61,14 +61,14 @@ public class AutenticacaoControllerYamlTest extends AbstractIntegrationTest {
 				.basePath("/autenticacao/signin")
 					.port(TestConfigs.SERVER_PORT)
 					.contentType(TestConfigs.CONTENT_TYPE_YML)
-					.body(usuario, objectMapper)
+					.body(usuario, ymlMapper)
 				.when()
 					.post()
 				.then()
 					.statusCode(200)
 				.extract()
 					.body()
-						.as(TokenDTO.class, objectMapper);
+						.as(TokenDTO.class, ymlMapper);
 		
 		assertNotNull(tokenDTO.getAccessToken());
 		assertNotNull(tokenDTO.getRefreshToken());
@@ -97,7 +97,7 @@ public class AutenticacaoControllerYamlTest extends AbstractIntegrationTest {
 					.statusCode(200)
 				.extract()
 					.body()
-						.as(TokenDTO.class, objectMapper);
+						.as(TokenDTO.class, ymlMapper);
 		
 		assertNotNull(newTokenDTO.getAccessToken());
 		assertNotNull(tokenDTO.getRefreshToken());
