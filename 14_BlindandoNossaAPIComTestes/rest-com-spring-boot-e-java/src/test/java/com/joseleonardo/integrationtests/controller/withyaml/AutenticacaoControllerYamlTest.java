@@ -53,10 +53,10 @@ public class AutenticacaoControllerYamlTest extends AbstractIntegrationTest {
 				.config(
 					RestAssuredConfig
 						.config()
-						.encoderConfig(EncoderConfig.encoderConfig()
+							.encoderConfig(EncoderConfig.encoderConfig()
 								.encodeContentTypeAs(
-										TestConfigs.CONTENT_TYPE_YML, 
-										ContentType.TEXT)))
+									TestConfigs.CONTENT_TYPE_YML, 
+									ContentType.TEXT)))
 				.accept(TestConfigs.CONTENT_TYPE_YML)
 				.basePath("/autenticacao/signin")
 					.port(TestConfigs.SERVER_PORT)
@@ -81,10 +81,10 @@ public class AutenticacaoControllerYamlTest extends AbstractIntegrationTest {
 				.config(
 					RestAssuredConfig
 						.config()
-						.encoderConfig(EncoderConfig.encoderConfig()
+							.encoderConfig(EncoderConfig.encoderConfig()
 								.encodeContentTypeAs(
-										TestConfigs.CONTENT_TYPE_YML, 
-										ContentType.TEXT)))
+									TestConfigs.CONTENT_TYPE_YML, 
+									ContentType.TEXT)))
 				.accept(TestConfigs.CONTENT_TYPE_YML)
 				.basePath("/autenticacao/refresh")
 					.port(TestConfigs.SERVER_PORT)

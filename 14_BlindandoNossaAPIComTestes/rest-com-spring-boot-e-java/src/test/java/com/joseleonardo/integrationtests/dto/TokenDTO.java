@@ -23,7 +23,6 @@ public class TokenDTO implements Serializable {
 
 	public TokenDTO(String nomeDeUsuario, Boolean autenticado, Date dataCriacao, 
 			Date expiraçao, String accessToken, String refreshToken) {
-		super();
 		this.nomeDeUsuario = nomeDeUsuario;
 		this.autenticado = autenticado;
 		this.dataCriacao = dataCriacao;
