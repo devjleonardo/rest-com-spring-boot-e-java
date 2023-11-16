@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name = "CredenciaisDaContaDTO")
 public class CredenciaisDaContaDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;

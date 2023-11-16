@@ -50,14 +50,14 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 	
 	
 	@Test
-	@Order(0)
+	@Order(1)
 	public void authorization() throws JsonMappingException, JsonProcessingException {
 		CredenciaisDaContaDTO usuario = new CredenciaisDaContaDTO("leandro", "admin123");
 		
 		String accessToken = given()
-				.config(
-					RestAssuredConfig
-						.config()
+			    .config(
+				    RestAssuredConfig
+					    .config()
 							.encoderConfig(EncoderConfig.encoderConfig()
 								.encodeContentTypeAs(
 									TestConfigs.CONTENT_TYPE_YML, 
@@ -76,7 +76,7 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 						.as(TokenDTO.class, ymlMapper).getAccessToken();
 		
 		requestSpecification = new RequestSpecBuilder()
-				.addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + accessToken)
+		        .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + accessToken)
 				.setBasePath("/api/pessoas/v1")
 				.setPort(TestConfigs.SERVER_PORT)
 					.addFilter(new RequestLoggingFilter(LogDetail.ALL))
@@ -85,11 +85,11 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 	}
 	
 	@Test
-	@Order(1)
+	@Order(2)
 	public void testSalvar() throws JsonMappingException, JsonProcessingException {
 		mockPessoa();
 		
-		PessoaDTO pessoaPersistida = given().spec(requestSpecification)
+		pessoa = given().spec(requestSpecification)
 				.config(
 					RestAssuredConfig
 						.config()
@@ -108,30 +108,27 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 							.body()
 								.as(PessoaDTO.class, ymlMapper);
 		
-		pessoa = pessoaPersistida;
+		assertNotNull(pessoa);
+		assertNotNull(pessoa.getId());
+		assertNotNull(pessoa.getPrimeiroNome());
+		assertNotNull(pessoa.getUltimoNome());
+		assertNotNull(pessoa.getEndereco());
+		assertNotNull(pessoa.getGenero());
 		
-		assertNotNull(pessoaPersistida);
+		assertTrue(pessoa.getId() > 0);
 		
-		assertNotNull(pessoaPersistida.getId());
-		assertNotNull(pessoaPersistida.getPrimeiroNome());
-		assertNotNull(pessoaPersistida.getUltimoNome());
-		assertNotNull(pessoaPersistida.getEndereco());
-		assertNotNull(pessoaPersistida.getGenero());
-		
-		assertTrue(pessoaPersistida.getId() > 0);
-		
-		assertEquals("Lúcia", pessoaPersistida.getPrimeiroNome());
-		assertEquals("Márcia", pessoaPersistida.getUltimoNome());
-		assertEquals("Santa Catarina", pessoaPersistida.getEndereco());
-		assertEquals("Feminino", pessoaPersistida.getGenero());
+		assertEquals("Lúcia", pessoa.getPrimeiroNome());
+		assertEquals("Márcia", pessoa.getUltimoNome());
+		assertEquals("Santa Catarina", pessoa.getEndereco());
+		assertEquals("Feminino", pessoa.getGenero());
 	}
 
 	@Test
-	@Order(2)
+	@Order(3)
 	public void testAtualizar() throws JsonMappingException, JsonProcessingException {
 		pessoa.setUltimoNome("Nogueira");
 		
-		PessoaDTO pessoaPersistida = given().spec(requestSpecification)
+		PessoaDTO pessoaAtualizada = given().spec(requestSpecification)
 				.config(
 					RestAssuredConfig
 						.config()
@@ -150,29 +147,24 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 					.body()
 						.as(PessoaDTO.class, ymlMapper);
 		
-		pessoa = pessoaPersistida;
+		assertNotNull(pessoaAtualizada);
+		assertNotNull(pessoaAtualizada.getId());
+		assertNotNull(pessoaAtualizada.getPrimeiroNome());
+		assertNotNull(pessoaAtualizada.getUltimoNome());
+		assertNotNull(pessoaAtualizada.getEndereco());
+		assertNotNull(pessoaAtualizada.getGenero());
 		
-		assertNotNull(pessoaPersistida);
-		
-		assertNotNull(pessoaPersistida.getId());
-		assertNotNull(pessoaPersistida.getPrimeiroNome());
-		assertNotNull(pessoaPersistida.getUltimoNome());
-		assertNotNull(pessoaPersistida.getEndereco());
-		assertNotNull(pessoaPersistida.getGenero());
-		
-		assertEquals(pessoa.getId(), pessoaPersistida.getId());
-		assertEquals("Lúcia", pessoaPersistida.getPrimeiroNome());
-		assertEquals("Nogueira", pessoaPersistida.getUltimoNome());
-		assertEquals("Santa Catarina", pessoaPersistida.getEndereco());
-		assertEquals("Feminino", pessoaPersistida.getGenero());
+		assertEquals(pessoa.getId(), pessoaAtualizada.getId());
+		assertEquals("Lúcia", pessoaAtualizada.getPrimeiroNome());
+		assertEquals("Nogueira", pessoaAtualizada.getUltimoNome());
+		assertEquals("Santa Catarina", pessoaAtualizada.getEndereco());
+		assertEquals("Feminino", pessoaAtualizada.getGenero());
 	}
 	
 	@Test
-	@Order(3)
+	@Order(4)
 	public void testBuscarPorId() throws JsonMappingException, JsonProcessingException {
-		mockPessoa();
-		
-		PessoaDTO pessoaPersistida = given().spec(requestSpecification)
+		PessoaDTO pessoaBuscada = given().spec(requestSpecification)
 				.config(
 					RestAssuredConfig
 						.config()
@@ -192,46 +184,42 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 					.body()
 						.as(PessoaDTO.class, ymlMapper);
 		
-		pessoa = pessoaPersistida;
+		assertNotNull(pessoaBuscada);
+		assertNotNull(pessoaBuscada.getId());
+		assertNotNull(pessoaBuscada.getPrimeiroNome());
+		assertNotNull(pessoaBuscada.getUltimoNome());
+		assertNotNull(pessoaBuscada.getEndereco());
+		assertNotNull(pessoaBuscada.getGenero());
 		
-		assertNotNull(pessoaPersistida);
-		
-		assertNotNull(pessoaPersistida.getId());
-		assertNotNull(pessoaPersistida.getPrimeiroNome());
-		assertNotNull(pessoaPersistida.getUltimoNome());
-		assertNotNull(pessoaPersistida.getEndereco());
-		assertNotNull(pessoaPersistida.getGenero());
-		
-		assertTrue(pessoaPersistida.getId() > 0);
-		
-		assertEquals("Lúcia", pessoaPersistida.getPrimeiroNome());
-		assertEquals("Nogueira", pessoaPersistida.getUltimoNome());
-		assertEquals("Santa Catarina", pessoaPersistida.getEndereco());
-		assertEquals("Feminino", pessoaPersistida.getGenero());
-	}
-	
-	@Test
-	@Order(4)
-	public void testDeletar() throws JsonMappingException, JsonProcessingException {
-		given().spec(requestSpecification)
-			.config(
-				RestAssuredConfig
-					.config()
-						.encoderConfig(EncoderConfig.encoderConfig()
-							.encodeContentTypeAs(
-								TestConfigs.CONTENT_TYPE_YML, 
-								ContentType.TEXT)))
-			.contentType(TestConfigs.CONTENT_TYPE_YML)
-			.accept(TestConfigs.CONTENT_TYPE_YML)
-			.pathParam("id", pessoa.getId())
-			.when()
-				.delete("{id}")
-			.then()
-				.statusCode(204);
+		assertEquals(pessoa.getId(), pessoaBuscada.getId());
+		assertEquals("Lúcia", pessoaBuscada.getPrimeiroNome());
+		assertEquals("Nogueira", pessoaBuscada.getUltimoNome());
+		assertEquals("Santa Catarina", pessoaBuscada.getEndereco());
+		assertEquals("Feminino", pessoaBuscada.getGenero());
 	}
 	
 	@Test
 	@Order(5)
+	public void testDeletar() throws JsonMappingException, JsonProcessingException {
+		given().spec(requestSpecification)
+	            .config(
+				    RestAssuredConfig
+					    .config()
+						    .encoderConfig(EncoderConfig.encoderConfig()
+							    .encodeContentTypeAs(
+								    TestConfigs.CONTENT_TYPE_YML, 
+								    ContentType.TEXT)))
+			    .contentType(TestConfigs.CONTENT_TYPE_YML)
+			    .accept(TestConfigs.CONTENT_TYPE_YML)
+			    .pathParam("id", pessoa.getId())
+			    .when()
+					.delete("{id}")
+				.then()
+				    .statusCode(204);
+	}
+	
+	@Test
+	@Order(6)
 	public void testListarTodas() throws JsonMappingException, JsonProcessingException {
 		PessoaDTO[] content = given().spec(requestSpecification)
 				.config(
@@ -263,7 +251,6 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 		assertNotNull(pessoaUm.getGenero());
 		
 		assertEquals(1, pessoaUm.getId());
-		
 		assertEquals("Maria", pessoaUm.getPrimeiroNome());
 		assertEquals("Helena", pessoaUm.getUltimoNome());
 		assertEquals("São Paulo", pessoaUm.getEndereco());
@@ -278,7 +265,6 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 		assertNotNull(pessoaSeis.getGenero());
 		
 		assertEquals(6, pessoaSeis.getId());
-		
 		assertEquals("Theo", pessoaSeis.getPrimeiroNome());
 		assertEquals("Benício", pessoaSeis.getUltimoNome());
 		assertEquals("Santa Catarina", pessoaSeis.getEndereco());
@@ -286,7 +272,7 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 	}
 	
 	@Test
-	@Order(6)
+	@Order(7)
 	public void testListarTodasSemToken() throws JsonMappingException, JsonProcessingException {
 		RequestSpecification requestSpecificationSemToken = new RequestSpecBuilder()
 				.setBasePath("/api/pessoas/v1")

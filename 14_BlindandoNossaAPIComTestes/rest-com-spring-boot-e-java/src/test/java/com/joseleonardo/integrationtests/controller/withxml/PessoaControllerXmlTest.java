@@ -49,7 +49,7 @@ public class PessoaControllerXmlTest extends AbstractIntegrationTest {
 	
 	
 	@Test
-	@Order(0)
+	@Order(1)
 	public void authorization() throws JsonMappingException, JsonProcessingException {
 		CredenciaisDaContaDTO usuario = new CredenciaisDaContaDTO("leandro", "admin123");
 		
@@ -68,7 +68,7 @@ public class PessoaControllerXmlTest extends AbstractIntegrationTest {
 						.as(TokenDTO.class).getAccessToken();
 		
 		requestSpecification = new RequestSpecBuilder()
-				.addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + accessToken)
+		        .addHeader(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + accessToken)
 				.setBasePath("/api/pessoas/v1")
 				.setPort(TestConfigs.SERVER_PORT)
 					.addFilter(new RequestLoggingFilter(LogDetail.ALL))
@@ -77,7 +77,7 @@ public class PessoaControllerXmlTest extends AbstractIntegrationTest {
 	}
 	
 	@Test
-	@Order(1)
+	@Order(2)
 	public void testSalvar() throws JsonMappingException, JsonProcessingException {
 		mockPessoa();
 		
@@ -93,27 +93,25 @@ public class PessoaControllerXmlTest extends AbstractIntegrationTest {
 					.body()
 					    .asString();
 		
-		PessoaDTO pessoaPersistida = xmlMapper.readValue(content, PessoaDTO.class);
-		pessoa = pessoaPersistida;
+		pessoa = xmlMapper.readValue(content, PessoaDTO.class);
 		
-		assertNotNull(pessoaPersistida);
+		assertNotNull(pessoa);
+		assertNotNull(pessoa.getId());
+		assertNotNull(pessoa.getPrimeiroNome());
+		assertNotNull(pessoa.getUltimoNome());
+		assertNotNull(pessoa.getEndereco());
+		assertNotNull(pessoa.getGenero());
 		
-		assertNotNull(pessoaPersistida.getId());
-		assertNotNull(pessoaPersistida.getPrimeiroNome());
-		assertNotNull(pessoaPersistida.getUltimoNome());
-		assertNotNull(pessoaPersistida.getEndereco());
-		assertNotNull(pessoaPersistida.getGenero());
+		assertTrue(pessoa.getId() > 0);
 		
-		assertTrue(pessoaPersistida.getId() > 0);
-		
-		assertEquals("Lúcia", pessoaPersistida.getPrimeiroNome());
-		assertEquals("Márcia", pessoaPersistida.getUltimoNome());
-		assertEquals("Santa Catarina", pessoaPersistida.getEndereco());
-		assertEquals("Feminino", pessoaPersistida.getGenero());
+		assertEquals("Lúcia", pessoa.getPrimeiroNome());
+		assertEquals("Márcia", pessoa.getUltimoNome());
+		assertEquals("Santa Catarina", pessoa.getEndereco());
+		assertEquals("Feminino", pessoa.getGenero());
 	}
 	
 	@Test
-	@Order(2)
+	@Order(3)
 	public void testAtualizar() throws JsonMappingException, JsonProcessingException {
 		pessoa.setUltimoNome("Nogueira");
 		
@@ -129,29 +127,25 @@ public class PessoaControllerXmlTest extends AbstractIntegrationTest {
 					.body()
 					    .asString();
 		
-		PessoaDTO pessoaPersistida = xmlMapper.readValue(content, PessoaDTO.class);
-		pessoa = pessoaPersistida;
+		PessoaDTO pessoaAtualizada = xmlMapper.readValue(content, PessoaDTO.class);
+
+		assertNotNull(pessoaAtualizada);
+		assertNotNull(pessoaAtualizada.getId());
+		assertNotNull(pessoaAtualizada.getPrimeiroNome());
+		assertNotNull(pessoaAtualizada.getUltimoNome());
+		assertNotNull(pessoaAtualizada.getEndereco());
+		assertNotNull(pessoaAtualizada.getGenero());
 		
-		assertNotNull(pessoaPersistida);
-		
-		assertNotNull(pessoaPersistida.getId());
-		assertNotNull(pessoaPersistida.getPrimeiroNome());
-		assertNotNull(pessoaPersistida.getUltimoNome());
-		assertNotNull(pessoaPersistida.getEndereco());
-		assertNotNull(pessoaPersistida.getGenero());
-		
-		assertEquals(pessoa.getId(), pessoaPersistida.getId());
-		assertEquals("Lúcia", pessoaPersistida.getPrimeiroNome());
-		assertEquals("Nogueira", pessoaPersistida.getUltimoNome());
-		assertEquals("Santa Catarina", pessoaPersistida.getEndereco());
-		assertEquals("Feminino", pessoaPersistida.getGenero());
+		assertEquals(pessoa.getId(), pessoaAtualizada.getId());
+		assertEquals("Lúcia", pessoaAtualizada.getPrimeiroNome());
+		assertEquals("Nogueira", pessoaAtualizada.getUltimoNome());
+		assertEquals("Santa Catarina", pessoaAtualizada.getEndereco());
+		assertEquals("Feminino", pessoaAtualizada.getGenero());
 	}
 	
 	@Test
-	@Order(3)
+	@Order(4)
 	public void testBuscarPorId() throws JsonMappingException, JsonProcessingException {
-		mockPessoa();
-		
 		String content = given().spec(requestSpecification)
 				.contentType(TestConfigs.CONTENT_TYPE_XML)
 				.accept(TestConfigs.CONTENT_TYPE_XML)
@@ -165,43 +159,40 @@ public class PessoaControllerXmlTest extends AbstractIntegrationTest {
 					.body()
 					    .asString();
 		
-		PessoaDTO pessoaPersistida = xmlMapper.readValue(content, PessoaDTO.class);
-		pessoa = pessoaPersistida;
+		PessoaDTO pessoaBuscada = xmlMapper.readValue(content, PessoaDTO.class);
 		
-		assertNotNull(pessoaPersistida);
+		assertNotNull(pessoaBuscada);
+		assertNotNull(pessoaBuscada.getId());
+		assertNotNull(pessoaBuscada.getPrimeiroNome());
+		assertNotNull(pessoaBuscada.getUltimoNome());
+		assertNotNull(pessoaBuscada.getEndereco());
+		assertNotNull(pessoaBuscada.getGenero());
 		
-		assertNotNull(pessoaPersistida.getId());
-		assertNotNull(pessoaPersistida.getPrimeiroNome());
-		assertNotNull(pessoaPersistida.getUltimoNome());
-		assertNotNull(pessoaPersistida.getEndereco());
-		assertNotNull(pessoaPersistida.getGenero());
-		
-		assertTrue(pessoaPersistida.getId() > 0);
-		
-		assertEquals("Lúcia", pessoaPersistida.getPrimeiroNome());
-		assertEquals("Nogueira", pessoaPersistida.getUltimoNome());
-		assertEquals("Santa Catarina", pessoaPersistida.getEndereco());
-		assertEquals("Feminino", pessoaPersistida.getGenero());
-	}
-	
-	@Test
-	@Order(4)
-	public void testDeletar() throws JsonMappingException, JsonProcessingException {
-		given().spec(requestSpecification)
-			.contentType(TestConfigs.CONTENT_TYPE_XML)
-			.accept(TestConfigs.CONTENT_TYPE_XML)
-			.pathParam("id", pessoa.getId())
-			.when()
-				.delete("{id}")
-			.then()
-				.statusCode(204);
+		assertEquals(pessoa.getId(), pessoaBuscada.getId());
+		assertEquals("Lúcia", pessoaBuscada.getPrimeiroNome());
+		assertEquals("Nogueira", pessoaBuscada.getUltimoNome());
+		assertEquals("Santa Catarina", pessoaBuscada.getEndereco());
+		assertEquals("Feminino", pessoaBuscada.getGenero());
 	}
 	
 	@Test
 	@Order(5)
+	public void testDeletar() throws JsonMappingException, JsonProcessingException {
+		given().spec(requestSpecification)
+		        .contentType(TestConfigs.CONTENT_TYPE_XML)
+			    .accept(TestConfigs.CONTENT_TYPE_XML)
+			    .pathParam("id", pessoa.getId())
+			    .when()
+				    .delete("{id}")
+			    .then()
+				    .statusCode(204);
+	}
+	
+	@Test
+	@Order(6)
 	public void testListarTodas() throws JsonMappingException, JsonProcessingException {
 		String content = given().spec(requestSpecification)
-				.contentType(TestConfigs.CONTENT_TYPE_XML)
+		        .contentType(TestConfigs.CONTENT_TYPE_XML)
 				.accept(TestConfigs.CONTENT_TYPE_XML)
 				.when()
 					.get()
@@ -224,7 +215,6 @@ public class PessoaControllerXmlTest extends AbstractIntegrationTest {
 		assertNotNull(pessoaUm.getGenero());
 		
 		assertEquals(1, pessoaUm.getId());
-		
 		assertEquals("Maria", pessoaUm.getPrimeiroNome());
 		assertEquals("Helena", pessoaUm.getUltimoNome());
 		assertEquals("São Paulo", pessoaUm.getEndereco());
@@ -239,7 +229,6 @@ public class PessoaControllerXmlTest extends AbstractIntegrationTest {
 		assertNotNull(pessoaSeis.getGenero());
 		
 		assertEquals(6, pessoaSeis.getId());
-		
 		assertEquals("Theo", pessoaSeis.getPrimeiroNome());
 		assertEquals("Benício", pessoaSeis.getUltimoNome());
 		assertEquals("Santa Catarina", pessoaSeis.getEndereco());
@@ -247,10 +236,10 @@ public class PessoaControllerXmlTest extends AbstractIntegrationTest {
 	}
 	
 	@Test
-	@Order(6)
+	@Order(7)
 	public void testListarTodasSemToken() throws JsonMappingException, JsonProcessingException {
 		RequestSpecification requestSpecificationSemToken = new RequestSpecBuilder()
-				.setBasePath("/api/pessoas/v1")
+		        .setBasePath("/api/pessoas/v1")
 				.setPort(TestConfigs.SERVER_PORT)
 					.addFilter(new RequestLoggingFilter(LogDetail.ALL))
 					.addFilter(new ResponseLoggingFilter(LogDetail.ALL))

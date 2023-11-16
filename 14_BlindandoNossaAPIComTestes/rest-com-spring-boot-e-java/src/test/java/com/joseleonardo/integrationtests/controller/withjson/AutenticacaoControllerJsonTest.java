@@ -28,7 +28,7 @@ public class AutenticacaoControllerJsonTest extends AbstractIntegrationTest {
 		CredenciaisDaContaDTO usuario = new CredenciaisDaContaDTO("leandro", "admin123");
 		
 		tokenDTO = given()
-				.basePath("/autenticacao/signin")
+		        .basePath("/autenticacao/signin")
 					.port(TestConfigs.SERVER_PORT)
 					.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.body(usuario)
@@ -48,8 +48,8 @@ public class AutenticacaoControllerJsonTest extends AbstractIntegrationTest {
 	@Order(2)
 	public void testRefresh() throws JsonMappingException, JsonProcessingException {
 		TokenDTO newTokenDTO = given()
-				.basePath("/autenticacao/refresh")
-					.port(TestConfigs.SERVER_PORT)
+	            .basePath("/autenticacao/refresh")
+				    .port(TestConfigs.SERVER_PORT)
 					.contentType(TestConfigs.CONTENT_TYPE_JSON)
 					.pathParam("nomeDeUsuario", tokenDTO.getNomeDeUsuario())
 					.header(TestConfigs.HEADER_PARAM_AUTHORIZATION, "Bearer " + tokenDTO.getRefreshToken())

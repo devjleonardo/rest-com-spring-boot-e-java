@@ -78,12 +78,12 @@ public class AutenticacaoControllerYamlTest extends AbstractIntegrationTest {
 	@Order(2)
 	public void testRefresh() throws JsonMappingException, JsonProcessingException {
 		TokenDTO newTokenDTO = given()
-				.config(
-					RestAssuredConfig
-						.config()
-							.encoderConfig(EncoderConfig.encoderConfig()
-								.encodeContentTypeAs(
-									TestConfigs.CONTENT_TYPE_YML, 
+		        .config(
+			        RestAssuredConfig
+					    .config()
+					        .encoderConfig(EncoderConfig.encoderConfig()
+						        .encodeContentTypeAs(
+								    TestConfigs.CONTENT_TYPE_YML, 
 									ContentType.TEXT)))
 				.accept(TestConfigs.CONTENT_TYPE_YML)
 				.basePath("/autenticacao/refresh")
