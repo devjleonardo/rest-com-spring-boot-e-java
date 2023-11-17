@@ -1,8 +1,8 @@
 package com.joseleonardo.integrationtests.controller.cors.withjson;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -89,23 +89,23 @@ public class PessoaControllerCorsJsonTest extends AbstractIntegrationTest {
 					.body()
 					    .asString();
 		
-		PessoaDTO pessoaPersistida = objectMapper.readValue(content, PessoaDTO.class);
-		pessoa = pessoaPersistida;
+		pessoa = objectMapper.readValue(content, PessoaDTO.class);
 		
-		assertNotNull(pessoaPersistida);
+		assertNotNull(pessoa);
 		
-		assertNotNull(pessoaPersistida.getId());
-		assertNotNull(pessoaPersistida.getPrimeiroNome());
-		assertNotNull(pessoaPersistida.getUltimoNome());
-		assertNotNull(pessoaPersistida.getEndereco());
-		assertNotNull(pessoaPersistida.getGenero());
+		assertNotNull(pessoa.getId());
+		assertNotNull(pessoa.getPrimeiroNome());
+		assertNotNull(pessoa.getUltimoNome());
+		assertNotNull(pessoa.getEndereco());
+		assertNotNull(pessoa.getGenero());
 		
-		assertTrue(pessoaPersistida.getId() > 0);
+		assertTrue(pessoa.getId() > 0);
+		assertTrue(pessoa.getHabilitada());
 		
-		assertEquals("Nicolas", pessoaPersistida.getPrimeiroNome());
-		assertEquals("Arthur", pessoaPersistida.getUltimoNome());
-		assertEquals("Rio Grande do Norte", pessoaPersistida.getEndereco());
-		assertEquals("Masculino", pessoaPersistida.getGenero());
+		assertEquals("Nicolas", pessoa.getPrimeiroNome());
+		assertEquals("Arthur", pessoa.getUltimoNome());
+		assertEquals("Rio Grande do Norte", pessoa.getEndereco());
+		assertEquals("Masculino", pessoa.getGenero());
 	}
 	
 	@Test
@@ -147,23 +147,23 @@ public class PessoaControllerCorsJsonTest extends AbstractIntegrationTest {
 					.body()
 					    .asString();
 		
-		PessoaDTO pessoaPersistida = objectMapper.readValue(content, PessoaDTO.class);
-		pessoa = pessoaPersistida;
+		PessoaDTO pessoaBuscada = objectMapper.readValue(content, PessoaDTO.class);
 		
-		assertNotNull(pessoaPersistida);
+		assertNotNull(pessoaBuscada);
 		
-		assertNotNull(pessoaPersistida.getId());
-		assertNotNull(pessoaPersistida.getPrimeiroNome());
-		assertNotNull(pessoaPersistida.getUltimoNome());
-		assertNotNull(pessoaPersistida.getEndereco());
-		assertNotNull(pessoaPersistida.getGenero());
+		assertNotNull(pessoaBuscada.getId());
+		assertNotNull(pessoaBuscada.getPrimeiroNome());
+		assertNotNull(pessoaBuscada.getUltimoNome());
+		assertNotNull(pessoaBuscada.getEndereco());
+		assertNotNull(pessoaBuscada.getGenero());
 		
-		assertTrue(pessoaPersistida.getId() > 0);
+		assertTrue(pessoaBuscada.getHabilitada());
 		
-		assertEquals("Nicolas", pessoaPersistida.getPrimeiroNome());
-		assertEquals("Arthur", pessoaPersistida.getUltimoNome());
-		assertEquals("Rio Grande do Norte", pessoaPersistida.getEndereco());
-		assertEquals("Masculino", pessoaPersistida.getGenero());
+		assertEquals(pessoa.getId(), pessoaBuscada.getId());
+		assertEquals("Nicolas", pessoaBuscada.getPrimeiroNome());
+		assertEquals("Arthur", pessoaBuscada.getUltimoNome());
+		assertEquals("Rio Grande do Norte", pessoaBuscada.getEndereco());
+		assertEquals("Masculino", pessoaBuscada.getGenero());
 	}
 	
 	@Test
@@ -193,6 +193,7 @@ public class PessoaControllerCorsJsonTest extends AbstractIntegrationTest {
 		pessoa.setUltimoNome("Arthur");
 		pessoa.setEndereco("Rio Grande do Norte");
 		pessoa.setGenero("Masculino");
+		pessoa.setHabilitada(true);
 	}
 
 }
