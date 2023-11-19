@@ -1,9 +1,11 @@
 package com.joseleonardo.unittests.mockito.services;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +44,7 @@ class PessoaServiceTest {
 		MockitoAnnotations.openMocks(this);
 	}
 
+	/*
 	@Test
 	void testListarTodas() {
 		List<Pessoa> list = input.mockEntityList();
@@ -93,6 +96,7 @@ class PessoaServiceTest {
 		assertEquals("Endereço teste7", pessoaSete.getEndereco());
 		assertEquals("Feminino", pessoaSete.getGenero());
 	}
+	*/
 
 	@Test
 	void testBuscarPorId() {

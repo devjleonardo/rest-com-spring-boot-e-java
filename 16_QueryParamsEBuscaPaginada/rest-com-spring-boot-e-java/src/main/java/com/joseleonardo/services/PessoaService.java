@@ -3,10 +3,11 @@ package com.joseleonardo.services;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.joseleonardo.controllers.PessoaController;
@@ -27,16 +28,20 @@ public class PessoaService {
 	@Autowired
 	private PessoaRepository pessoaRepository;
 	
-	public List<PessoaDTO> listarTodas() {
+	public Page<PessoaDTO> listarTodas(Pageable pageable) {
 		logger.info("Encontrar todas pessoas!");
 		
-		List<PessoaDTO> pessoas = DozerMapper.parseListObjects(pessoaRepository.findAll(), PessoaDTO.class);
+		Page<Pessoa> pessoaPage = pessoaRepository.findAll(pageable);
 		
-		pessoas.stream()
-			.forEach(pessoa -> pessoa.add(linkTo(methodOn(PessoaController.class)
-						.buscarPorId(pessoa.getId())).withSelfRel()));
+		Page<PessoaDTO> pessoaDTOPage = pessoaPage.map(
+				pessoa -> DozerMapper.parseObject(pessoa, PessoaDTO.class));
 		
-		return pessoas;
+		pessoaDTOPage.map(
+				pessoa -> pessoa.add(
+				    linkTo(methodOn(PessoaController.class)
+					    .buscarPorId(pessoa.getId())).withSelfRel()));
+		
+		return pessoaDTOPage;
 	}
 	
 	public PessoaDTO buscarPorId(Long id) {
