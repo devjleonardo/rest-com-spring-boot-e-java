@@ -70,6 +70,37 @@ public class PessoaController {
 		return ResponseEntity.ok(pessoaService.listarTodas(pageable));
 	}
 	
+	@GetMapping(value = "/buscar-pessoas-por-nome/{primeiroNome}",produces = { MediaTypeUtil.APPLICATION_JSON, MediaTypeUtil.APPLICATION_XML, 
+			MediaTypeUtil.APPLICATION_YML })
+	@Operation(summary = "Buscar pessoas por nome", 
+	    description = "Buscar pessoas por nome", 
+	    tags = {"Pessoas"},
+	    responses = {
+		    @ApiResponse(description = "Sucesso", responseCode = "200", 
+			    content = {
+				    @Content(
+					    mediaType = "application/json",
+						array = @ArraySchema(schema = @Schema(implementation = PessoaDTO.class))
+					)
+				}),
+			@ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+			@ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+			@ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+			@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content)
+		}
+	)
+	public ResponseEntity<PagedModel<EntityModel<PessoaDTO>>> buscarPessoasPorNome(
+			@PathVariable(value = "primeiroNome") String primeiroNome,
+			@RequestParam(value = "page", defaultValue = "0") Integer page,
+			@RequestParam(value = "size", defaultValue = "12") Integer size,
+			@RequestParam(value = "direction", defaultValue = "asc") String direction) {
+		Direction sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
+		
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "primeiroNome"));
+		
+		return ResponseEntity.ok(pessoaService.buscarPessoasPorNome(primeiroNome, pageable));
+	}
+	
 	@CrossOrigin(origins = "http://localhost:8080")
 	@GetMapping(value = "/{id}", 
 			produces = { MediaTypeUtil.APPLICATION_JSON, MediaTypeUtil.APPLICATION_XML, 

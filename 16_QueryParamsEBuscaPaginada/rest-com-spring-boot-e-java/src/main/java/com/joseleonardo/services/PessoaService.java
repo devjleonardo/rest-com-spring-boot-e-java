@@ -57,6 +57,28 @@ public class PessoaService {
 		return assembler.toModel(pessoasDTOPage, link);
 	}
 	
+	public PagedModel<EntityModel<PessoaDTO>> buscarPessoasPorNome(String primeiroNome, Pageable pageable) {
+		logger.info("Encontrar todas pessoas!");
+		
+		Page<Pessoa> pessoasPage = pessoaRepository.buscarPessoasPorNome(primeiroNome, pageable);
+		
+		Page<PessoaDTO> pessoasDTOPage = pessoasPage.map(
+				pessoa -> DozerMapper.parseObject(pessoa, PessoaDTO.class));
+		
+		pessoasDTOPage.map(
+				pessoa -> pessoa.add(
+				    linkTo(methodOn(PessoaController.class)
+					    .buscarPorId(pessoa.getId())).withSelfRel()));
+		
+		Link link = linkTo(
+				methodOn(PessoaController.class)
+				    .listar(pageable.getPageNumber(), 
+				    		pageable.getPageSize(), 
+				    		"asc")).withSelfRel();
+		
+		return assembler.toModel(pessoasDTOPage, link);
+	}
+	
 	public PessoaDTO buscarPorId(Long id) {
 		logger.info("Encontrar uma pessoa!");
 		
