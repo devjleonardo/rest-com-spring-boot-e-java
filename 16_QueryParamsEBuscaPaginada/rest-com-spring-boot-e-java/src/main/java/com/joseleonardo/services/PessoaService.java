@@ -8,6 +8,10 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
 import com.joseleonardo.controllers.PessoaController;
@@ -28,7 +32,10 @@ public class PessoaService {
 	@Autowired
 	private PessoaRepository pessoaRepository;
 	
-	public Page<PessoaDTO> listarTodas(Pageable pageable) {
+	@Autowired
+	private PagedResourcesAssembler<PessoaDTO> assembler;
+	
+	public PagedModel<EntityModel<PessoaDTO>> listarTodas(Pageable pageable) {
 		logger.info("Encontrar todas pessoas!");
 		
 		Page<Pessoa> pessoaPage = pessoaRepository.findAll(pageable);
@@ -41,7 +48,13 @@ public class PessoaService {
 				    linkTo(methodOn(PessoaController.class)
 					    .buscarPorId(pessoa.getId())).withSelfRel()));
 		
-		return pessoaDTOPage;
+		Link link = linkTo(
+				methodOn(PessoaController.class)
+				    .listar(pageable.getPageNumber(), 
+				    		pageable.getPageSize(), 
+				    		"asc")).withSelfRel();
+		
+		return assembler.toModel(pessoaDTOPage, link);
 	}
 	
 	public PessoaDTO buscarPorId(Long id) {
