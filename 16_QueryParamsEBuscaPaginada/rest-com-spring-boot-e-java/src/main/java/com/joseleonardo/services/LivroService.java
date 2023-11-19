@@ -3,10 +3,15 @@ package com.joseleonardo.services;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
 import com.joseleonardo.controllers.LivroController;
@@ -25,16 +30,29 @@ public class LivroService {
 	@Autowired
 	private LivroRepository livroRepository;
 	
-	public List<LivroDTO> listarTodos() {
+	@Autowired
+	private PagedResourcesAssembler<LivroDTO> assembler;
+	
+	public PagedModel<EntityModel<LivroDTO>> listarTodos(Pageable pageable) {
 		logger.info("Encontrar todos livros!");
 		
-		List<LivroDTO> livros = DozerMapper.parseListObjects(livroRepository.findAll(), LivroDTO.class);
+		Page<Livro> livrosPage = livroRepository.findAll(pageable);
 		
-		livros.stream()
-			.forEach(livro -> livro.add(linkTo(methodOn(LivroController.class)
-						.buscarPorId(livro.getId())).withSelfRel()));
+		Page<LivroDTO> livrosDTOPage = livrosPage.map(
+				livro -> DozerMapper.parseObject(livro, LivroDTO.class));
 		
-		return livros;
+		livrosDTOPage.map(
+				livro -> livro.add(
+				    linkTo(methodOn(LivroController.class)
+					    .buscarPorId(livro.getId())).withSelfRel()));
+		
+		Link link = linkTo(
+				methodOn(LivroController.class)
+				    .listar(pageable.getPageNumber(), 
+				    		pageable.getPageSize(), 
+				    		"asc")).withSelfRel();
+		
+		return assembler.toModel(livrosDTOPage, link);
 	}
 	
 	public LivroDTO buscarPorId(Long id) {

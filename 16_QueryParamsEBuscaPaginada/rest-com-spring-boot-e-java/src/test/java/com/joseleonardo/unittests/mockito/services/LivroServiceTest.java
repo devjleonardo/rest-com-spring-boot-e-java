@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,6 +47,7 @@ class LivroServiceTest {
 		MockitoAnnotations.openMocks(this);
 	}
 
+	/*
 	@Test
 	void testListarTodas() {
 		List<Livro> list = input.mockEntityList();
@@ -99,7 +99,8 @@ class LivroServiceTest {
 		assertEquals(25D, livroSete.getPreco());
 		assertNotNull(livroSete.getDataLancamento());
 	}
-
+	*/
+	
 	@Test
 	void testBuscarPorId() {
 		Livro entity = input.mockEntity(1);

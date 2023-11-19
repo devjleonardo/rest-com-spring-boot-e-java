@@ -38,12 +38,12 @@ public class PessoaService {
 	public PagedModel<EntityModel<PessoaDTO>> listarTodas(Pageable pageable) {
 		logger.info("Encontrar todas pessoas!");
 		
-		Page<Pessoa> pessoaPage = pessoaRepository.findAll(pageable);
+		Page<Pessoa> pessoasPage = pessoaRepository.findAll(pageable);
 		
-		Page<PessoaDTO> pessoaDTOPage = pessoaPage.map(
+		Page<PessoaDTO> pessoasDTOPage = pessoasPage.map(
 				pessoa -> DozerMapper.parseObject(pessoa, PessoaDTO.class));
 		
-		pessoaDTOPage.map(
+		pessoasDTOPage.map(
 				pessoa -> pessoa.add(
 				    linkTo(methodOn(PessoaController.class)
 					    .buscarPorId(pessoa.getId())).withSelfRel()));
@@ -54,7 +54,7 @@ public class PessoaService {
 				    		pageable.getPageSize(), 
 				    		"asc")).withSelfRel();
 		
-		return assembler.toModel(pessoaDTOPage, link);
+		return assembler.toModel(pessoasDTOPage, link);
 	}
 	
 	public PessoaDTO buscarPorId(Long id) {
