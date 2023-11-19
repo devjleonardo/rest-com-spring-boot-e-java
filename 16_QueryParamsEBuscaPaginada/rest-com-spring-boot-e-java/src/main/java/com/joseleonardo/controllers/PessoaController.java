@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -58,8 +60,12 @@ public class PessoaController {
 	)
 	public ResponseEntity<Page<PessoaDTO>> listar(
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
-			@RequestParam(value = "limit", defaultValue = "12") Integer limit) {
-		Pageable pageable = PageRequest.of(page, limit);
+			@RequestParam(value = "size", defaultValue = "12") Integer size,
+			@RequestParam(value = "direction", defaultValue = "asc") String direction) {
+
+		Direction sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
+		
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "primeiroNome"));
 		
 		return ResponseEntity.ok(pessoaService.listarTodas(pageable));
 	}
