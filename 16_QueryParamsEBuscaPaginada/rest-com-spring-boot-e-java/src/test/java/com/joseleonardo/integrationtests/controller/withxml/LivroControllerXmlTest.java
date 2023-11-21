@@ -187,7 +187,7 @@ public class LivroControllerXmlTest extends AbstractIntegrationTest {
 		String content = given().spec(requestSpecification)
 		        .contentType(TestConfigs.CONTENT_TYPE_XML)
 				.accept(TestConfigs.CONTENT_TYPE_XML)
-				.queryParams("page", 0 , "limit", 12, "direction", "asc")
+				.queryParams("page", 0 , "size", 12, "direction", "asc")
 				.when()
 				    .get()
 				.then()

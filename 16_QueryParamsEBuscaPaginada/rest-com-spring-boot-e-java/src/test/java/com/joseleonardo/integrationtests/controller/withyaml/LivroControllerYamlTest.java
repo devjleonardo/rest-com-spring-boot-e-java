@@ -223,7 +223,7 @@ public class LivroControllerYamlTest extends AbstractIntegrationTest {
                                     ContentType.TEXT)))
                 .contentType(TestConfigs.CONTENT_TYPE_YML)
 		        .accept(TestConfigs.CONTENT_TYPE_YML)
-		        .queryParams("page", 0 , "limit", 12, "direction", "asc")
+		        .queryParams("page", 0 , "size", 12, "direction", "asc")
                 .when()
                     .get()
                 .then()

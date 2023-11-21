@@ -181,7 +181,7 @@ public class LivroControllerJsonTest extends AbstractIntegrationTest {
     public void testListarTodos() throws JsonMappingException, JsonProcessingException {
     	String content = given().spec(requestSpecification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
-                .queryParams("page", 0 , "limit", 12, "direction", "asc")
+                .queryParams("page", 0 , "size", 12, "direction", "asc")
                 .when()
                     .get()
                 .then()
