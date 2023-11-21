@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -23,6 +22,7 @@ import com.joseleonardo.integrationtests.controller.withyaml.mapper.YMLMapper;
 import com.joseleonardo.integrationtests.dto.CredenciaisDaContaDTO;
 import com.joseleonardo.integrationtests.dto.PessoaDTO;
 import com.joseleonardo.integrationtests.dto.TokenDTO;
+import com.joseleonardo.integrationtests.dto.wrappers.WrapperPessoaDTO;
 import com.joseleonardo.integrationtests.testcontainers.AbstractIntegrationTest;
 
 import io.restassured.builder.RequestSpecBuilder;
@@ -265,7 +265,7 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 	@Test
 	@Order(7)
 	public void testListarTodas() throws JsonMappingException, JsonProcessingException {
-		PessoaDTO[] content = given().spec(requestSpecification)
+		WrapperPessoaDTO wrapperPessoaDTO = given().spec(requestSpecification)
 				.config(
 					RestAssuredConfig
 						.config()
@@ -281,10 +281,10 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 					.statusCode(200)
 				.extract()
 					.body()
-						.as(PessoaDTO[].class, ymlMapper);
+						.as(WrapperPessoaDTO.class, ymlMapper);
 					 // .as(new TypeRef<List<PessoaDTO>>() {});
 		
-		List<PessoaDTO> pessoas = Arrays.asList(content);
+		List<PessoaDTO> pessoas = wrapperPessoaDTO.getEmbedded().getPessoas();
 		
 		PessoaDTO pessoaUm = pessoas.get(0);
 		

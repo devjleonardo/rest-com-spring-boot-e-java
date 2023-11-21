@@ -16,7 +16,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -24,6 +23,7 @@ import com.joseleonardo.configs.TestConfigs;
 import com.joseleonardo.integrationtests.dto.CredenciaisDaContaDTO;
 import com.joseleonardo.integrationtests.dto.PessoaDTO;
 import com.joseleonardo.integrationtests.dto.TokenDTO;
+import com.joseleonardo.integrationtests.dto.wrappers.WrapperPessoaDTO;
 import com.joseleonardo.integrationtests.testcontainers.AbstractIntegrationTest;
 
 import io.restassured.builder.RequestSpecBuilder;
@@ -242,8 +242,8 @@ public class PessoaControllerXmlTest extends AbstractIntegrationTest {
 						.asString();
 					 // .as(new TypeRef<List<PessoaDTO>>() {});
 		
-		List<PessoaDTO> pessoas = xmlMapper.readValue(content, 
-				new TypeReference<List<PessoaDTO>>() {});
+		WrapperPessoaDTO wrapperPessoaDTO  = xmlMapper.readValue(content, WrapperPessoaDTO.class);
+		List<PessoaDTO> pessoas = wrapperPessoaDTO.getEmbedded().getPessoas();
 		
 		PessoaDTO pessoaUm = pessoas.get(0);
 		

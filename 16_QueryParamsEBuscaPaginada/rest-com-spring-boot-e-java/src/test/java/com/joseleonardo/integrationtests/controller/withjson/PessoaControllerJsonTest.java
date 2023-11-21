@@ -16,7 +16,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +23,7 @@ import com.joseleonardo.configs.TestConfigs;
 import com.joseleonardo.integrationtests.dto.CredenciaisDaContaDTO;
 import com.joseleonardo.integrationtests.dto.PessoaDTO;
 import com.joseleonardo.integrationtests.dto.TokenDTO;
+import com.joseleonardo.integrationtests.dto.wrappers.WrapperPessoaDTO;
 import com.joseleonardo.integrationtests.testcontainers.AbstractIntegrationTest;
 
 import io.restassured.builder.RequestSpecBuilder;
@@ -227,6 +227,7 @@ public class PessoaControllerJsonTest extends AbstractIntegrationTest {
 	public void testListarTodas() throws JsonMappingException, JsonProcessingException {
 		String content = given().spec(requestSpecification)
 				.contentType(TestConfigs.CONTENT_TYPE_JSON)
+				.queryParams("page", 3, "size", 10, "direction", "asc")
 				.when()
 					.get()
 				.then()
@@ -236,8 +237,8 @@ public class PessoaControllerJsonTest extends AbstractIntegrationTest {
 						.asString();
 					 // .as(new TypeRef<List<PessoaDTO>>() {});
 		
-		List<PessoaDTO> pessoas = objectMapper.readValue(content, 
-				new TypeReference<List<PessoaDTO>>() {});
+		WrapperPessoaDTO wrapperPessoaDTO  = objectMapper.readValue(content, WrapperPessoaDTO.class);
+		List<PessoaDTO> pessoas = wrapperPessoaDTO.getEmbedded().getPessoas();
 		
 		PessoaDTO pessoaUm = pessoas.get(0);
 		
@@ -249,11 +250,11 @@ public class PessoaControllerJsonTest extends AbstractIntegrationTest {
 		
 		assertTrue(pessoaUm.getHabilitada());
 		
-		assertEquals(1, pessoaUm.getId());
-		assertEquals("Maria", pessoaUm.getPrimeiroNome());
-		assertEquals("Helena", pessoaUm.getUltimoNome());
-		assertEquals("São Paulo", pessoaUm.getEndereco());
-		assertEquals("Feminino", pessoaUm.getGenero());
+		assertEquals(151, pessoaUm.getId());
+		assertEquals("Allie", pessoaUm.getPrimeiroNome());
+		assertEquals("Cavey", pessoaUm.getUltimoNome());
+		assertEquals("653 Maple Wood Plaza", pessoaUm.getEndereco());
+		assertEquals("Female", pessoaUm.getGenero());
 		
 		PessoaDTO pessoaSeis = pessoas.get(5);
 		
@@ -263,13 +264,13 @@ public class PessoaControllerJsonTest extends AbstractIntegrationTest {
 		assertNotNull(pessoaSeis.getEndereco());
 		assertNotNull(pessoaSeis.getGenero());
 		
-		assertTrue(pessoaSeis.getHabilitada());
+		assertFalse(pessoaSeis.getHabilitada());
 		
-		assertEquals(6, pessoaSeis.getId());
-		assertEquals("Theo", pessoaSeis.getPrimeiroNome());
-		assertEquals("Benício", pessoaSeis.getUltimoNome());
-		assertEquals("Santa Catarina", pessoaSeis.getEndereco());
-		assertEquals("Masculino", pessoaSeis.getGenero());
+		assertEquals(371, pessoaSeis.getId());
+		assertEquals("Alwin", pessoaSeis.getPrimeiroNome());
+		assertEquals("Barrasse", pessoaSeis.getUltimoNome());
+		assertEquals("95512 Artisan Alley", pessoaSeis.getEndereco());
+		assertEquals("Male", pessoaSeis.getGenero());
 	}
 	
 	@Test
