@@ -44,60 +44,6 @@ class PessoaServiceTest {
 		MockitoAnnotations.openMocks(this);
 	}
 
-	/*
-	@Test
-	void testListarTodas() {
-		List<Pessoa> list = input.mockEntityList();
-		
-		when(pessoaRepository.findAll()).thenReturn(list);
-		
-		List<PessoaDTO> pessoas = pessoaService.listarTodas();
-		
-		assertNotNull(pessoas);
-		
-		assertEquals(14, pessoas.size());
-		
-		PessoaDTO pessoaUm = pessoas.get(1);
-		
-		assertNotNull(pessoaUm);
-		assertNotNull(pessoaUm.getId());
-		assertNotNull(pessoaUm.getLinks());
-		
-		assertTrue(pessoaUm.toString().contains("[</api/pessoas/v1/1>;rel=\"self\"]"));
-		
-		assertEquals("Primeiro nome teste1", pessoaUm.getPrimeiroNome());
-		assertEquals("Último nome teste1", pessoaUm.getUltimoNome());
-		assertEquals("Endereço teste1", pessoaUm.getEndereco());
-		assertEquals("Feminino", pessoaUm.getGenero());
-		
-		PessoaDTO pessoaQuatro = pessoas.get(4);
-		
-		assertNotNull(pessoaQuatro);
-		assertNotNull(pessoaQuatro.getId());
-		assertNotNull(pessoaQuatro.getLinks());
-		
-		assertTrue(pessoaQuatro.toString().contains("[</api/pessoas/v1/4>;rel=\"self\"]"));
-		
-		assertEquals("Primeiro nome teste4", pessoaQuatro.getPrimeiroNome());
-		assertEquals("Último nome teste4", pessoaQuatro.getUltimoNome());
-		assertEquals("Endereço teste4", pessoaQuatro.getEndereco());
-		assertEquals("Masculino", pessoaQuatro.getGenero());
-		
-		PessoaDTO pessoaSete = pessoas.get(7);
-		
-		assertNotNull(pessoaSete);
-		assertNotNull(pessoaSete.getId());
-		assertNotNull(pessoaSete.getLinks());
-		
-		assertTrue(pessoaSete.toString().contains("[</api/pessoas/v1/7>;rel=\"self\"]"));
-		
-		assertEquals("Primeiro nome teste7", pessoaSete.getPrimeiroNome());
-		assertEquals("Último nome teste7", pessoaSete.getUltimoNome());
-		assertEquals("Endereço teste7", pessoaSete.getEndereco());
-		assertEquals("Feminino", pessoaSete.getGenero());
-	}
-	*/
-
 	@Test
 	void testBuscarPorId() {
 		Pessoa entity = input.mockEntity(1);

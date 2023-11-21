@@ -67,7 +67,7 @@ public class LivroControllerYamlTest extends AbstractIntegrationTest {
                     .port(TestConfigs.SERVER_PORT)
                     .contentType(TestConfigs.CONTENT_TYPE_YML)
     				.accept(TestConfigs.CONTENT_TYPE_YML)
-                .body(usuario, ymlMapper)
+    				.body(usuario, ymlMapper)
                 .when()
                     .post()
                 .then()

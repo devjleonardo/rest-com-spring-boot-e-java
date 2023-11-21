@@ -82,6 +82,7 @@ public class LivroControllerJsonTest extends AbstractIntegrationTest {
 
         String content = given().spec(requestSpecification)
              .contentType(TestConfigs.CONTENT_TYPE_JSON)
+             .accept(TestConfigs.CONTENT_TYPE_JSON)
              .body(livro)
              .when()
              	.post()
@@ -113,6 +114,7 @@ public class LivroControllerJsonTest extends AbstractIntegrationTest {
 
         String content = given().spec(requestSpecification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .accept(TestConfigs.CONTENT_TYPE_JSON)
                 .body(livro)
                 .when()
                     .put()
@@ -141,6 +143,7 @@ public class LivroControllerJsonTest extends AbstractIntegrationTest {
     public void testBuscarPorId() throws JsonMappingException, JsonProcessingException {
         String content = given().spec(requestSpecification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .accept(TestConfigs.CONTENT_TYPE_JSON)
                 .pathParam("id", livro.getId())
                 .when()
                     .get("{id}")
@@ -169,6 +172,7 @@ public class LivroControllerJsonTest extends AbstractIntegrationTest {
     public void testDeletar() {
         given().spec(requestSpecification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .accept(TestConfigs.CONTENT_TYPE_JSON)
                 .pathParam("id", livro.getId())
                 .when()
                     .delete("{id}")
@@ -181,6 +185,7 @@ public class LivroControllerJsonTest extends AbstractIntegrationTest {
     public void testListarTodos() throws JsonMappingException, JsonProcessingException {
     	String content = given().spec(requestSpecification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .accept(TestConfigs.CONTENT_TYPE_JSON)
                 .queryParams("page", 0 , "size", 12, "direction", "asc")
                 .when()
                     .get()
