@@ -16,7 +16,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -24,6 +23,7 @@ import com.joseleonardo.configs.TestConfigs;
 import com.joseleonardo.integrationtests.dto.CredenciaisDaContaDTO;
 import com.joseleonardo.integrationtests.dto.LivroDTO;
 import com.joseleonardo.integrationtests.dto.TokenDTO;
+import com.joseleonardo.integrationtests.dto.pagedmodels.PagedModelLivro;
 import com.joseleonardo.integrationtests.testcontainers.AbstractIntegrationTest;
 
 import io.restassured.builder.RequestSpecBuilder;
@@ -187,6 +187,7 @@ public class LivroControllerXmlTest extends AbstractIntegrationTest {
 		String content = given().spec(requestSpecification)
 		        .contentType(TestConfigs.CONTENT_TYPE_XML)
 				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.queryParams("page", 0 , "limit", 12, "direction", "asc")
 				.when()
 				    .get()
 				.then()
@@ -195,19 +196,20 @@ public class LivroControllerXmlTest extends AbstractIntegrationTest {
 				    .body()
 					    .asString();
 		
-		List<LivroDTO> livros = objectMapper.readValue(content, new TypeReference<List<LivroDTO>>() {});
+		PagedModelLivro pagedModelLivro = objectMapper.readValue(content, PagedModelLivro.class);
+		List<LivroDTO> livros = pagedModelLivro.getContent();
 		
-		LivroDTO livroUm = livros.get(0);
+        LivroDTO livroUm = livros.get(0);
         
         assertNotNull(livroUm.getId());
         assertNotNull(livroUm.getTitulo());
         assertNotNull(livroUm.getAutor());
         assertNotNull(livroUm.getPreco());
         
-        assertEquals(1, livroUm.getId());
-        assertEquals("Working effectively with legacy code", livroUm.getTitulo());
-        assertEquals("Michael C. Feathers", livroUm.getAutor());
-        assertEquals(49.00, livroUm.getPreco());
+        assertEquals(12, livroUm.getId());
+        assertEquals("Big Data: como extrair volume, variedade, velocidade e valor da avalanche de informação cotidiana", livroUm.getTitulo());
+        assertEquals("Viktor Mayer-Schonberger e Kenneth Kukier", livroUm.getAutor());
+        assertEquals(54.00, livroUm.getPreco());
         
         LivroDTO livroCinco = livros.get(4);
         
@@ -216,10 +218,10 @@ public class LivroControllerXmlTest extends AbstractIntegrationTest {
         assertNotNull(livroCinco.getAutor());
         assertNotNull(livroCinco.getPreco());
         
-        assertEquals(5, livroCinco.getId());
-        assertEquals("Code complete", livroCinco.getTitulo());
-        assertEquals("Steve McConnell", livroCinco.getAutor());
-        assertEquals(58.0, livroCinco.getPreco());
+        assertEquals(8, livroCinco.getId());
+        assertEquals("Domain Driven Design", livroCinco.getTitulo());
+        assertEquals("Eric Evans", livroCinco.getAutor());
+        assertEquals(92.00, livroCinco.getPreco());
 	}
 
 	

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +22,7 @@ import com.joseleonardo.integrationtests.controller.withyaml.mapper.YMLMapper;
 import com.joseleonardo.integrationtests.dto.CredenciaisDaContaDTO;
 import com.joseleonardo.integrationtests.dto.LivroDTO;
 import com.joseleonardo.integrationtests.dto.TokenDTO;
+import com.joseleonardo.integrationtests.dto.pagedmodels.PagedModelLivro;
 import com.joseleonardo.integrationtests.testcontainers.AbstractIntegrationTest;
 
 import io.restassured.builder.RequestSpecBuilder;
@@ -213,7 +213,7 @@ public class LivroControllerYamlTest extends AbstractIntegrationTest {
     @Test
     @Order(6)
     public void testListarTodos() throws JsonMappingException, JsonProcessingException {
-    	LivroDTO[] content = given().spec(requestSpecification)
+    	PagedModelLivro pagedModelLivro = given().spec(requestSpecification)
                 .config(
                     RestAssuredConfig
                         .config()
@@ -223,41 +223,40 @@ public class LivroControllerYamlTest extends AbstractIntegrationTest {
                                     ContentType.TEXT)))
                 .contentType(TestConfigs.CONTENT_TYPE_YML)
 		        .accept(TestConfigs.CONTENT_TYPE_YML)
+		        .queryParams("page", 0 , "limit", 12, "direction", "asc")
                 .when()
                     .get()
                 .then()
                     .statusCode(200)
                 .extract()
                     .body()
-                        .as(LivroDTO[].class, ymlMapper); 
+                        .as(PagedModelLivro.class, ymlMapper); 
 
-        List<LivroDTO> livros = Arrays.asList(content);
+        List<LivroDTO> livros = pagedModelLivro.getContent();
 
         LivroDTO livroUm = livros.get(0);
         
-        assertNotNull(livroUm);
         assertNotNull(livroUm.getId());
         assertNotNull(livroUm.getTitulo());
         assertNotNull(livroUm.getAutor());
         assertNotNull(livroUm.getPreco());
         
-        assertEquals(1, livroUm.getId());
-        assertEquals("Working effectively with legacy code", livroUm.getTitulo());
-        assertEquals("Michael C. Feathers", livroUm.getAutor());
-        assertEquals(49.00, livroUm.getPreco());
+        assertEquals(12, livroUm.getId());
+        assertEquals("Big Data: como extrair volume, variedade, velocidade e valor da avalanche de informação cotidiana", livroUm.getTitulo());
+        assertEquals("Viktor Mayer-Schonberger e Kenneth Kukier", livroUm.getAutor());
+        assertEquals(54.00, livroUm.getPreco());
         
         LivroDTO livroCinco = livros.get(4);
         
-        assertNotNull(livroCinco);
         assertNotNull(livroCinco.getId());
         assertNotNull(livroCinco.getTitulo());
         assertNotNull(livroCinco.getAutor());
         assertNotNull(livroCinco.getPreco());
         
-        assertEquals(5, livroCinco.getId());
-        assertEquals("Code complete", livroCinco.getTitulo());
-        assertEquals("Steve McConnell", livroCinco.getAutor());
-        assertEquals(58.0, livroCinco.getPreco());
+        assertEquals(8, livroCinco.getId());
+        assertEquals("Domain Driven Design", livroCinco.getTitulo());
+        assertEquals("Eric Evans", livroCinco.getAutor());
+        assertEquals(92.00, livroCinco.getPreco());
     }
     
 	@Test

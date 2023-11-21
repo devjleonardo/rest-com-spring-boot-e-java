@@ -16,7 +16,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +23,7 @@ import com.joseleonardo.configs.TestConfigs;
 import com.joseleonardo.integrationtests.dto.CredenciaisDaContaDTO;
 import com.joseleonardo.integrationtests.dto.LivroDTO;
 import com.joseleonardo.integrationtests.dto.TokenDTO;
+import com.joseleonardo.integrationtests.dto.wrappers.WrapperLivroDTO;
 import com.joseleonardo.integrationtests.testcontainers.AbstractIntegrationTest;
 
 import io.restassured.builder.RequestSpecBuilder;
@@ -181,7 +181,7 @@ public class LivroControllerJsonTest extends AbstractIntegrationTest {
     public void testListarTodos() throws JsonMappingException, JsonProcessingException {
     	String content = given().spec(requestSpecification)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
-                .queryParams("page", 0 , "limit", 5, "direction", "asc")
+                .queryParams("page", 0 , "limit", 12, "direction", "asc")
                 .when()
                     .get()
                 .then()
@@ -189,9 +189,10 @@ public class LivroControllerJsonTest extends AbstractIntegrationTest {
                 .extract()
                     .body()
                         .asString();
+    	
+        WrapperLivroDTO wrapperLivroDTO = objectMapper.readValue(content, WrapperLivroDTO.class);
+        List<LivroDTO> livros = wrapperLivroDTO.getEmbedded().getLivros();
         
-        List<LivroDTO> livros = objectMapper.readValue(content, new TypeReference<List<LivroDTO>>() {});
-		
         LivroDTO livroUm = livros.get(0);
         
         assertNotNull(livroUm.getId());
@@ -199,10 +200,10 @@ public class LivroControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(livroUm.getAutor());
         assertNotNull(livroUm.getPreco());
         
-        assertEquals(1, livroUm.getId());
-        assertEquals("Working effectively with legacy code", livroUm.getTitulo());
-        assertEquals("Michael C. Feathers", livroUm.getAutor());
-        assertEquals(49.00, livroUm.getPreco());
+        assertEquals(12, livroUm.getId());
+        assertEquals("Big Data: como extrair volume, variedade, velocidade e valor da avalanche de informação cotidiana", livroUm.getTitulo());
+        assertEquals("Viktor Mayer-Schonberger e Kenneth Kukier", livroUm.getAutor());
+        assertEquals(54.00, livroUm.getPreco());
         
         LivroDTO livroCinco = livros.get(4);
         
@@ -211,10 +212,10 @@ public class LivroControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(livroCinco.getAutor());
         assertNotNull(livroCinco.getPreco());
         
-        assertEquals(5, livroCinco.getId());
-        assertEquals("Code complete", livroCinco.getTitulo());
-        assertEquals("Steve McConnell", livroCinco.getAutor());
-        assertEquals(58.0, livroCinco.getPreco());
+        assertEquals(8, livroCinco.getId());
+        assertEquals("Domain Driven Design", livroCinco.getTitulo());
+        assertEquals("Eric Evans", livroCinco.getAutor());
+        assertEquals(92.00, livroCinco.getPreco());
     }
     
     @Test
