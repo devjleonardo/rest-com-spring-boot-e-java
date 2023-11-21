@@ -237,7 +237,7 @@ public class PessoaControllerJsonTest extends AbstractIntegrationTest {
 						.asString();
 					 // .as(new TypeRef<List<PessoaDTO>>() {});
 		
-		WrapperPessoaDTO wrapperPessoaDTO  = objectMapper.readValue(content, WrapperPessoaDTO.class);
+		WrapperPessoaDTO wrapperPessoaDTO = objectMapper.readValue(content, WrapperPessoaDTO.class);
 		List<PessoaDTO> pessoas = wrapperPessoaDTO.getEmbedded().getPessoas();
 		
 		PessoaDTO pessoaUm = pessoas.get(0);

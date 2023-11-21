@@ -22,7 +22,7 @@ import com.joseleonardo.integrationtests.controller.withyaml.mapper.YMLMapper;
 import com.joseleonardo.integrationtests.dto.CredenciaisDaContaDTO;
 import com.joseleonardo.integrationtests.dto.PessoaDTO;
 import com.joseleonardo.integrationtests.dto.TokenDTO;
-import com.joseleonardo.integrationtests.dto.wrappers.WrapperPessoaDTO;
+import com.joseleonardo.integrationtests.dto.pagedmodels.PagedModelPessoa;
 import com.joseleonardo.integrationtests.testcontainers.AbstractIntegrationTest;
 
 import io.restassured.builder.RequestSpecBuilder;
@@ -265,9 +265,9 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 	@Test
 	@Order(7)
 	public void testListarTodas() throws JsonMappingException, JsonProcessingException {
-		WrapperPessoaDTO wrapperPessoaDTO = given().spec(requestSpecification)
-				.config(
-					RestAssuredConfig
+	    PagedModelPessoa pagedModelPessoa = given().spec(requestSpecification)
+	            .config(
+				    RestAssuredConfig
 						.config()
 							.encoderConfig(EncoderConfig.encoderConfig()
 								.encodeContentTypeAs(
@@ -275,16 +275,16 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 									ContentType.TEXT)))
 				.contentType(TestConfigs.CONTENT_TYPE_YML)
 				.accept(TestConfigs.CONTENT_TYPE_YML)
+				.queryParams("page", 3, "size", 10, "direction", "asc")
 				.when()
 					.get()
 				.then()
 					.statusCode(200)
 				.extract()
 					.body()
-						.as(WrapperPessoaDTO.class, ymlMapper);
-					 // .as(new TypeRef<List<PessoaDTO>>() {});
+						.as(PagedModelPessoa.class, ymlMapper);
 		
-		List<PessoaDTO> pessoas = wrapperPessoaDTO.getEmbedded().getPessoas();
+		List<PessoaDTO> pessoas = pagedModelPessoa.getContent();
 		
 		PessoaDTO pessoaUm = pessoas.get(0);
 		
@@ -296,11 +296,11 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 		
 		assertTrue(pessoaUm.getHabilitada());
 		
-		assertEquals(1, pessoaUm.getId());
-		assertEquals("Maria", pessoaUm.getPrimeiroNome());
-		assertEquals("Helena", pessoaUm.getUltimoNome());
-		assertEquals("São Paulo", pessoaUm.getEndereco());
-		assertEquals("Feminino", pessoaUm.getGenero());
+		assertEquals(151, pessoaUm.getId());
+		assertEquals("Allie", pessoaUm.getPrimeiroNome());
+		assertEquals("Cavey", pessoaUm.getUltimoNome());
+		assertEquals("653 Maple Wood Plaza", pessoaUm.getEndereco());
+		assertEquals("Female", pessoaUm.getGenero());
 		
 		PessoaDTO pessoaSeis = pessoas.get(5);
 		
@@ -310,13 +310,13 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 		assertNotNull(pessoaSeis.getEndereco());
 		assertNotNull(pessoaSeis.getGenero());
 		
-		assertTrue(pessoaUm.getHabilitada());
+		assertFalse(pessoaSeis.getHabilitada());
 		
-		assertEquals(6, pessoaSeis.getId());
-		assertEquals("Theo", pessoaSeis.getPrimeiroNome());
-		assertEquals("Benício", pessoaSeis.getUltimoNome());
-		assertEquals("Santa Catarina", pessoaSeis.getEndereco());
-		assertEquals("Masculino", pessoaSeis.getGenero());
+		assertEquals(371, pessoaSeis.getId());
+		assertEquals("Alwin", pessoaSeis.getPrimeiroNome());
+		assertEquals("Barrasse", pessoaSeis.getUltimoNome());
+		assertEquals("95512 Artisan Alley", pessoaSeis.getEndereco());
+		assertEquals("Male", pessoaSeis.getGenero());
 	}
 	
 	@Test
