@@ -281,6 +281,42 @@ public class PessoaControllerXmlTest extends AbstractIntegrationTest {
 	
 	@Test
 	@Order(8)
+	public void testBuscarPorNome() throws JsonMappingException, JsonProcessingException {
+		String content = given().spec(requestSpecification)
+				.contentType(TestConfigs.CONTENT_TYPE_XML)
+				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.pathParam("primeiroNome", "heo")
+				.queryParams("page", 0, "size", 6, "direction", "asc")
+				.when()
+					.get("buscar-pessoas-por-nome/{primeiroNome}")
+				.then()
+					.statusCode(200)
+				.extract()
+					.body()
+						.asString();
+		
+		PagedModelPessoa wrapper = xmlMapper.readValue(content, PagedModelPessoa.class);
+		List<PessoaDTO> pessoas = wrapper.getContent();
+	
+		PessoaDTO pessoaUm = pessoas.get(0);
+		
+		assertNotNull(pessoaUm.getId());
+		assertNotNull(pessoaUm.getPrimeiroNome());
+		assertNotNull(pessoaUm.getUltimoNome());
+		assertNotNull(pessoaUm.getEndereco());
+		assertNotNull(pessoaUm.getGenero());
+		
+		assertTrue(pessoaUm.getHabilitada());
+		
+		assertEquals(6, pessoaUm.getId());
+		assertEquals("Theo", pessoaUm.getPrimeiroNome());
+		assertEquals("Benício", pessoaUm.getUltimoNome());
+		assertEquals("Santa Catarina", pessoaUm.getEndereco());
+		assertEquals("Masculino", pessoaUm.getGenero());
+	}
+	
+	@Test
+	@Order(9)
 	public void testListarTodasSemToken() throws JsonMappingException, JsonProcessingException {
 		RequestSpecification requestSpecificationSemToken = new RequestSpecBuilder()
 		        .setBasePath("/api/pessoas/v1")

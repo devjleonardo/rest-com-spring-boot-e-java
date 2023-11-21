@@ -321,6 +321,48 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 	
 	@Test
 	@Order(8)
+	public void testBuscarPorNome() throws JsonMappingException, JsonProcessingException {
+	    PagedModelPessoa pagedModelPessoa = given().spec(requestSpecification)
+	            .config(
+				    RestAssuredConfig
+						.config()
+							.encoderConfig(EncoderConfig.encoderConfig()
+								.encodeContentTypeAs(
+									TestConfigs.CONTENT_TYPE_YML, 
+									ContentType.TEXT)))
+				.contentType(TestConfigs.CONTENT_TYPE_YML)
+				.accept(TestConfigs.CONTENT_TYPE_YML)
+				.pathParam("primeiroNome", "heo")
+				.queryParams("page", 0, "size", 6, "direction", "asc")
+				.when()
+				    .get("buscar-pessoas-por-nome/{primeiroNome}")
+				.then()
+					.statusCode(200)
+				.extract()
+					.body()
+						.as(PagedModelPessoa.class, ymlMapper);
+		
+		List<PessoaDTO> pessoas = pagedModelPessoa.getContent();
+		
+		PessoaDTO pessoaUm = pessoas.get(0);
+		
+		assertNotNull(pessoaUm.getId());
+		assertNotNull(pessoaUm.getPrimeiroNome());
+		assertNotNull(pessoaUm.getUltimoNome());
+		assertNotNull(pessoaUm.getEndereco());
+		assertNotNull(pessoaUm.getGenero());
+		
+		assertTrue(pessoaUm.getHabilitada());
+		
+		assertEquals(6, pessoaUm.getId());
+		assertEquals("Theo", pessoaUm.getPrimeiroNome());
+		assertEquals("Benício", pessoaUm.getUltimoNome());
+		assertEquals("Santa Catarina", pessoaUm.getEndereco());
+		assertEquals("Masculino", pessoaUm.getGenero());
+	}
+	
+	@Test
+	@Order(9)
 	public void testListarTodasSemToken() throws JsonMappingException, JsonProcessingException {
 		RequestSpecification requestSpecificationSemToken = new RequestSpecBuilder()
 				.setBasePath("/api/pessoas/v1")
