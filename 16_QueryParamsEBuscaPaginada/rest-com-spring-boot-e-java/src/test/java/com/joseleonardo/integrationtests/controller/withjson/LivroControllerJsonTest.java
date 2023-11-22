@@ -244,6 +244,33 @@ public class LivroControllerJsonTest extends AbstractIntegrationTest {
 					.body()
 						.asString();
 	}
+    
+	@Test
+	@Order(8)
+	public void testHateoas() throws JsonMappingException, JsonProcessingException {
+    	String content = given().spec(requestSpecification)
+                .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .accept(TestConfigs.CONTENT_TYPE_JSON)
+                .queryParams("page", 0 , "size", 12, "direction", "asc")
+                .when()
+                    .get()
+                .then()
+                    .statusCode(200)
+                .extract()
+                    .body()
+                        .asString();
+		
+		assertTrue(content.contains("\"_links\":{\"self\":{\"href\":\"http://localhost:8888/api/livros/v1/3\"}}}"));
+		assertTrue(content.contains("\"_links\":{\"self\":{\"href\":\"http://localhost:8888/api/livros/v1/5\"}}}"));
+		assertTrue(content.contains("\"_links\":{\"self\":{\"href\":\"http://localhost:8888/api/livros/v1/7\"}}}"));
+		
+		assertTrue(content.contains("{\"first\":{\"href\":\"http://localhost:8888/api/livros/v1?direction=asc&page=0&size=12&sort=titulo,asc\"}"));
+		assertTrue(content.contains("\"self\":{\"href\":\"http://localhost:8888/api/livros/v1?page=0&size=12&direction=asc\"}"));
+		assertTrue(content.contains("\"next\":{\"href\":\"http://localhost:8888/api/livros/v1?direction=asc&page=1&size=12&sort=titulo,asc\"}"));
+		assertTrue(content.contains("\"last\":{\"href\":\"http://localhost:8888/api/livros/v1?direction=asc&page=1&size=12&sort=titulo,asc\"}}"));
+		
+		assertTrue(content.contains("\"page\":{\"size\":12,\"totalElements\":15,\"totalPages\":2,\"number\":0}}"));
+	}
      
     private void mockLivro() {
         livro.setTitulo("Docker Deep Dive");

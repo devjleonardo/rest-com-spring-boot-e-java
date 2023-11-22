@@ -229,7 +229,7 @@ public class LivroControllerXmlTest extends AbstractIntegrationTest {
 	@Order(7)
 	public void testListarTodosSemToken() throws JsonMappingException, JsonProcessingException {
 	    RequestSpecification requestSpecificationSemToken = new RequestSpecBuilder()
-		        .setBasePath("/api/book/v1")
+		        .setBasePath("/api/livros/v1")
 			    .setPort(TestConfigs.SERVER_PORT)
 				    .addFilter(new RequestLoggingFilter(LogDetail.ALL))
 				    .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
@@ -242,6 +242,33 @@ public class LivroControllerXmlTest extends AbstractIntegrationTest {
 					.get()
 				.then()
 					.statusCode(403);
+	}
+	
+	@Test
+	@Order(8)
+	public void testHateoas() throws JsonMappingException, JsonProcessingException {
+		String content = given().spec(requestSpecification)
+		        .contentType(TestConfigs.CONTENT_TYPE_XML)
+				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.queryParams("page", 0 , "size", 12, "direction", "asc")
+				.when()
+				    .get()
+				.then()
+				    .statusCode(200)
+				.extract()
+				    .body()
+					    .asString();
+		
+		assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/livros/v1/3</href></links>"));
+		assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/livros/v1/5</href></links>"));
+		assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/livros/v1/7</href></links>"));
+		
+		assertTrue(content.contains("<links><rel>first</rel><href>http://localhost:8888/api/livros/v1?direction=asc&amp;page=0&amp;size=12&amp;sort=titulo,asc</href></links>"));
+		assertTrue(content.contains("<links><rel>self</rel><href>http://localhost:8888/api/livros/v1?page=0&amp;size=12&amp;direction=asc</href></links>"));
+		assertTrue(content.contains("<links><rel>next</rel><href>http://localhost:8888/api/livros/v1?direction=asc&amp;page=1&amp;size=12&amp;sort=titulo,asc</href></links>"));
+		assertTrue(content.contains("<links><rel>last</rel><href>http://localhost:8888/api/livros/v1?direction=asc&amp;page=1&amp;size=12&amp;sort=titulo,asc</href></links>"));
+		
+		assertTrue(content.contains("<page><size>12</size><totalElements>15</totalElements><totalPages>2</totalPages><number>0</number></page>"));
 	}
 	
     private void mockLivro() {
