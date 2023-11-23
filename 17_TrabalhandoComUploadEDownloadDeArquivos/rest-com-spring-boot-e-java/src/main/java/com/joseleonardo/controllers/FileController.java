@@ -1,6 +1,9 @@
 package com.joseleonardo.controllers;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +41,16 @@ public class FileController {
 		
 		return new UploadFileResponseDTO(
 				filename, filedDownloadUri, file.getContentType(), file.getSize());
+	}
+	
+	@PostMapping("/upload-multiple-files")
+	public List<UploadFileResponseDTO> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+		logger.info("Armazenando vários arquivo em disco");
+		
+		return Arrays.asList(files)
+				.stream()
+				.map(file -> uploadFile(file))
+				.collect(Collectors.toList());
 	}
 	
 }
