@@ -139,7 +139,7 @@
 			<artifactId>java-jwt</artifactId>
 			<version>${java-jwt.version}</version>
 		</dependency>
-		
+
 		<!-- Configuration Processor -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
