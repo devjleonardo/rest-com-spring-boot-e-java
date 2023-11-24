@@ -6,7 +6,7 @@ import "./styles.css";
 
 import logoImage from '../../assets/logo.svg'
 
-export default function Livro() {
+export default function Livros() {
     return (
         <div className="livro-container">
             <header>
@@ -14,7 +14,7 @@ export default function Livro() {
 
                 <span>Bem-vindo, <strong>Leandro</strong>! </span>
 
-                <Link className="button" to="livros/novo">Adicionar novo livro</Link>
+                <Link className="button" to="/livros/novo">Adicionar novo livro</Link>
             
                 <button type="button">
                     <FiPower size={18} color="#251FC5" />
