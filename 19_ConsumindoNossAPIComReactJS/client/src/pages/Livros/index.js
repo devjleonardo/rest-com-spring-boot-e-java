@@ -20,11 +20,36 @@ export default function Livros() {
         api.get("api/livros/v1", {
             headers: {
                 Authorization: `Bearer ${accessToken}`
+            },
+            params: {
+                page: 1,
+                size: 4,
+                direction: "asc"
             }
         }).then(response => {
             setLivros(response.data._embedded.livroDTOList)
         });
     });
+
+    async function deletarLivro(id) {
+        try {
+            await api.delete(`api/livros/v1/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+
+            setLivros(livros.filter(livro => livro.id !== id))
+        } catch (error) {
+            alert("Falha ao deletar! Tente novamente.");
+        }
+    }
+
+    async function logout() {
+        localStorage.clear();
+
+        navigate("/");
+    }
     
     return (
         <div className="livro-container">
@@ -35,7 +60,7 @@ export default function Livros() {
 
                 <Link className="button" to="/livros/novo">Adicionar novo livro</Link>
             
-                <button type="button">
+                <button onClick={logout} type="button">
                     <FiPower size={18} color="#251FC5" />
                 </button>
             </header>
@@ -44,7 +69,7 @@ export default function Livros() {
 
             <ul>
                 {livros.map(livro => (
-                    <li>
+                    <li key={livro.id}>
                         <strong>Título</strong>
                         <p>{livro.titulo}</p>
 
@@ -61,7 +86,7 @@ export default function Livros() {
                             <FiEdit size={20} color="#251FC5" />
                         </button>
 
-                        <button type="button">
+                        <button onClick={() => deletarLivro(livro.id)} type="button">
                             <FiTrash2 size={20} color="#251FC5" />
                         </button>
                     </li>
