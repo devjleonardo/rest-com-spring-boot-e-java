@@ -421,7 +421,7 @@ public class PessoaControllerYamlTest extends AbstractIntegrationTest {
 		assertTrue(content.contains("rel: \"next\"  href: \"http://localhost:8888/api/pessoas/v1?direction=asc&page=4&size=10&sort=primeiroNome,asc\""));
 		assertTrue(content.contains("rel: \"last\"  href: \"http://localhost:8888/api/pessoas/v1?direction=asc&page=100&size=10&sort=primeiroNome,asc\""));
 		
-		assertTrue(content.contains("page:  size: 10  totalElements: 1007  totalPages: 101  number: 3"));
+		assertTrue(content.contains("page:  size: 10  totalElements: 1006  totalPages: 101  number: 3"));
 	}
 	
 	private void mockPessoa() {
