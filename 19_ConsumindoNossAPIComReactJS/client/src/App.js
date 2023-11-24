@@ -1,7 +1,10 @@
 import React from 'react';
+import Header from './Header'
 
 export default function App() {
   return (
-    <h1>Hello Word</h1>
+    <Header>
+      Client REST - Properties
+    </Header>
   );
 }
