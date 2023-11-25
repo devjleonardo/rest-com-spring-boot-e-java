@@ -31,6 +31,14 @@ export default function Livros() {
         });
     });
 
+    async function editarLivro(id) {
+        try {
+            navigate(`/livros/novo/${id}`)
+        } catch (error) {
+            alert("Falha ao editar! Tente novamente.");
+        }
+    }
+
     async function deletarLivro(id) {
         try {
             await api.delete(`api/livros/v1/${id}`, {
@@ -58,7 +66,7 @@ export default function Livros() {
 
                 <span>Bem-vindo, <strong>{nomeDeUsuario.toUpperCase()}</strong>! </span>
 
-                <Link className="button" to="/livros/novo">Adicionar novo livro</Link>
+                <Link className="button" to="/livros/novo/0">Adicionar novo livro</Link>
             
                 <button onClick={logout} type="button">
                     <FiPower size={18} color="#251FC5" />
@@ -82,7 +90,7 @@ export default function Livros() {
                         <strong>Data de lançamento:</strong>
                         <p>{Intl.DateTimeFormat("pt-BR").format(livro.dataNascimento)}</p>
 
-                        <button type="button">
+                        <button onClick={() => editarLivro(livro.id)} type="button">
                             <FiEdit size={20} color="#251FC5" />
                         </button>
 

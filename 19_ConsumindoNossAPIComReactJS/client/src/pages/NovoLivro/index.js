@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 
 import api from "../../services/api";
@@ -14,6 +14,8 @@ export default function NovoLivro() {
     const [autor, setAutor] = useState('');
     const [dataLancamento, setDataLancamento] = useState('');
     const [preco, setPreco] = useState('');
+
+    const {livroId} = useParams();
     
     const accessToken = localStorage.getItem("accessToken");
 
@@ -50,7 +52,7 @@ export default function NovoLivro() {
 
                     <h1>Adicionar novo livro</h1>
 
-                    <p>Insira as informações do livro e clique em 'Adicionar'!</p>
+                    <p>Insira as informações do livro e clique em 'Adicionar'! #### {livroId}</p>
 
                     <Link className="back-link" to="/livros">
                         <FiArrowLeft size={16} color="#251FC5" />
