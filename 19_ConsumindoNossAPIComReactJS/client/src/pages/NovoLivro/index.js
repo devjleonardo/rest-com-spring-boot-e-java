@@ -49,7 +49,7 @@ export default function NovoLivro() {
         }
     }, [livroId])
 
-    async function criarNovoLivro(e) {
+    async function salvarOuAtualizar(e) {
         e.preventDefault();
 
         const data = {
@@ -60,11 +60,21 @@ export default function NovoLivro() {
         };
 
         try {
-            await api.post("api/livros/v1", data, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            });
+            if (livroId === "0") {
+                await api.post("api/livros/v1", data, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
+            } else {
+                data.id = id
+
+                await api.put("api/livros/v1", data, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });    
+            }
 
             navigate("/livros");
         } catch (error) {
@@ -78,17 +88,17 @@ export default function NovoLivro() {
                 <section className="form">
                     <img src={logoImage} alt="Logo" />
 
-                    <h1>Adicionar novo livro</h1>
+                    <h1>{livroId === "0" ? "Adicionar novo" : "Atualizar"} livro</h1>
 
-                    <p>Insira as informações do livro e clique em 'Adicionar'! #### {livroId}</p>
+                    <p>{livroId === "0" ? "Insira" : "Atualize"} as informações do livro e clique em {livroId === "0" ? "Adicionar" : "Atualizar"}!</p>
 
                     <Link className="back-link" to="/livros">
                         <FiArrowLeft size={16} color="#251FC5" />
-                        Home
+                        Voltar para os registros de livros
                     </Link>
                 </section>
 
-                <form onSubmit={criarNovoLivro}>
+                <form onSubmit={salvarOuAtualizar}>
                     <input
                         placeholder="Título" 
                         value={titulo}
@@ -113,7 +123,7 @@ export default function NovoLivro() {
                         onChange={e => setPreco(e.target.value)}
                     />
 
-                    <button className="button" type="submit">Adicionar</button>
+                    <button className="button" type="submit">{livroId === "0" ? "Adicionar" : "Atualizar"}</button>
                 </form>
             </div>
         </div>
