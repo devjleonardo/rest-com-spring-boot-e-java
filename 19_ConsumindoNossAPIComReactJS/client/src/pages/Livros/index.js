@@ -10,7 +10,7 @@ import logoImage from '../../assets/logo.svg'
 
 export default function Livros() {
     const [livros, setLivros] = useState([]);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(0);
 
     const nomeDeUsuario = localStorage.getItem("nomeDeUsuario");
     const accessToken = localStorage.getItem("accessToken");
