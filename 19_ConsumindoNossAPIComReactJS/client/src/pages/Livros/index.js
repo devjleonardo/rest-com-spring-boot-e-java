@@ -10,6 +10,7 @@ import logoImage from '../../assets/logo.svg'
 
 export default function Livros() {
     const [livros, setLivros] = useState([]);
+    const [page, setPage] = useState(1);
 
     const nomeDeUsuario = localStorage.getItem("nomeDeUsuario");
     const accessToken = localStorage.getItem("accessToken");
@@ -17,19 +18,24 @@ export default function Livros() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        api.get("api/livros/v1", {
+        fetchMoreLivros();
+    }, []);
+
+    async function fetchMoreLivros() {
+       const response = await api.get("api/livros/v1", {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             },
             params: {
-                page: 1,
+                page: page,
                 size: 4,
                 direction: "asc"
             }
-        }).then(response => {
-            setLivros(response.data._embedded.livroDTOList)
         });
-    });
+        
+        setLivros([...livros, ...response.data._embedded.livroDTOList]);
+        setPage(page + 1);
+    }
 
     async function editarLivro(id) {
         try {
@@ -100,6 +106,8 @@ export default function Livros() {
                     </li>
                  ))}
             </ul>
+
+            <button className="button" onClick={fetchMoreLivros} type="button">Carregar mais</button>
         </div>
     );
 }
