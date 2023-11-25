@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 
@@ -20,6 +20,34 @@ export default function NovoLivro() {
     const accessToken = localStorage.getItem("accessToken");
 
     const navigate = useNavigate();
+
+    async function loadLivro() {
+        try {
+            const response = await api.get(`api/livros/v1/${livroId}`, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+            let adjustedDate = response.data.dataLancamento.split("T", 10)[0];
+
+            setId(response.data.id);
+            setTitulo(response.data.titulo);
+            setAutor(response.data.autor);
+            setDataLancamento(adjustedDate);
+            setPreco(response.data.preco);
+        } catch (error) {
+            alert("Erro ao recuperar o livro! Tente novamente!");
+            navigate("/livros");
+        }
+    }
+
+    useEffect(() => {
+        if (livroId === "0") {
+            return;
+        } else {
+            loadLivro();
+        }
+    }, [livroId])
 
     async function criarNovoLivro(e) {
         e.preventDefault();

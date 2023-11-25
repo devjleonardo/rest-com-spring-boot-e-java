@@ -88,7 +88,7 @@ export default function Livros() {
                         <p>{Intl.NumberFormat("pt-BR", {style: "currency", currency: "BRL"}).format(livro.preco)}</p>
 
                         <strong>Data de lançamento:</strong>
-                        <p>{Intl.DateTimeFormat("pt-BR").format(livro.dataNascimento)}</p>
+                        <p>{Intl.DateTimeFormat("pt-BR").format(new Date(livro.dataLancamento))}</p>
 
                         <button onClick={() => editarLivro(livro.id)} type="button">
                             <FiEdit size={20} color="#251FC5" />
